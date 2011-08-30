@@ -4,15 +4,20 @@ publishing a new version to a NuGet package repository.
 
 NuSelfUpdate will handle everything that is needed to download the new
 version, extract it and switch the application's executable files with
-the new version.  On top of this NuSelfUpdate can be setup to verify
-the publisher of the new version as well as checking that the all packaged
-files have the correct file hashes.
+the new version.  It will do all this while your application is running,
+so you can install updates in the background and next time the application
+is run it will be the new version :)
+
+On top of this NuSelfUpdate can be setup to verify the publisher of the new 
+version via digital certificates and signing as well as checking that the all 
+packaged files have the correct file hashes.
 
 An Example
 ----------
 
 This example shows what we are aiming for.
 
+```c#
     static void Main()
     {
         var selfUpdater = CreateSelfUpdater();
@@ -51,3 +56,4 @@ This example shows what we are aiming for.
     {
         // What you would normally have in your main method goes here
     }
+```
