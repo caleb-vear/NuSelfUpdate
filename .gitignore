@@ -1,0 +1,11 @@
+bin
+obj
+Debug
+*TestResult*
+*.suo
+*.LDF
+*.sln.cache
+*.ps
+*VisualState.xml
+*csproj.user
+*_ReSharper*

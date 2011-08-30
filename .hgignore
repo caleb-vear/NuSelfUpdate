@@ -1,0 +1,16 @@
+# use glob syntax.
+syntax: glob
+
+*.suo
+*\bin\*
+*\obj\*
+_ReSharper*
+*\_ReSharper*
+*.ReSharper.user
+glob:Source/Shell/publish/
+*.csproj.user
+*\TestResult.xml
+*.csproj.VisualState.xml
+*\App_Data\*
+bin/*
+Release/*
