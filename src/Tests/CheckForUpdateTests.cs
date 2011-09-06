@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
 using NuGet;
@@ -7,8 +8,43 @@ using Shouldly;
 
 namespace NuSelfUpdate.Tests
 {    
-    public class CheckForUpdate
+    public class CheckForUpdateTests
     {
+        static IVersionLocator CreateVersionLocator(Version currentVersion)
+        {
+            var versionLocator = Substitute.For<IVersionLocator>();
+            versionLocator.CurrentVersion.Returns(currentVersion);
+
+            return versionLocator;
+        }
+
+        static IPackageRepositoryFactory CreatePackageRepositoryFactory(IEnumerable<IPackage> packages)
+        {
+            var packageRepositoryFactory = Substitute.For<IPackageRepositoryFactory>();
+
+            packageRepositoryFactory
+                .CreateRepository("repository")
+                .GetPackages()
+                .Returns(packages.AsQueryable());
+            return packageRepositoryFactory;
+        }
+
+        static IEnumerable<IPackage> CreatePacakges(params Version[] versions)
+        {
+            var maxVersion = versions.Max();
+
+            var packages = versions.Select(v =>
+                                               {
+                                                   var package = Substitute.For<IPackage>();
+                                                   package.Id.Returns("package");
+                                                   package.Version.Returns(v);
+                                                   package.IsLatestVersion.Returns(v == maxVersion);
+                                                   return package;
+                                               });
+
+            return packages.ToArray();
+        }
+
         [TestFixture]
         public class WhenNoUpdatesAvailable
         {
@@ -17,22 +53,10 @@ namespace NuSelfUpdate.Tests
             {
                 var installedVersion = new Version(1, 0, 0, 0);
 
-                var packages = new[] {Substitute.For<IPackage>()};
-                packages[0].Version.Returns(installedVersion);
-                packages[0].IsLatestVersion.Returns(true);
-                packages[0].Id.Returns("package");
+                var packages = CreatePacakges(installedVersion);
+                var packageRepositoryFactory = CreatePackageRepositoryFactory(packages);
 
-                var packageRepositoryFactory = Substitute.For<IPackageRepositoryFactory>();
-
-                packageRepositoryFactory
-                    .CreateRepository("repository")
-                    .GetPackages()
-                    .Returns(packages.AsQueryable());
-                
-                var versionLocator = Substitute.For<IVersionLocator>();
-                versionLocator.CurrentVersion.Returns(installedVersion);
-
-                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, versionLocator);
+                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, CreateVersionLocator(installedVersion));
 
                 var updateCheck = updater.CheckForUpdate();
 
@@ -49,25 +73,10 @@ namespace NuSelfUpdate.Tests
                 var installedVersion = new Version(1, 0, 0, 0);
                 var newVersion = new Version(1, 1, 0, 0);
 
-                var packages = new[] { Substitute.For<IPackage>(), Substitute.For<IPackage>() };
-                packages[0].Version.Returns(installedVersion);
-                packages[0].IsLatestVersion.Returns(true);
-                packages[0].Id.Returns("package");
-                packages[1].Version.Returns(newVersion);
-                packages[1].IsLatestVersion.Returns(false);
-                packages[1].Id.Returns("package");
+                var packages = CreatePacakges(installedVersion, newVersion);
+                var packageRepositoryFactory = CreatePackageRepositoryFactory(packages);
 
-                var packageRepositoryFactory = Substitute.For<IPackageRepositoryFactory>();
-
-                packageRepositoryFactory
-                    .CreateRepository("repository")
-                    .GetPackages()
-                    .Returns(packages.AsQueryable());
-
-                var versionLocator = Substitute.For<IVersionLocator>();
-                versionLocator.CurrentVersion.Returns(installedVersion);
-
-                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, versionLocator);
+                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, CreateVersionLocator(installedVersion));
 
                 var updateCheck = updater.CheckForUpdate();
 
