@@ -63,6 +63,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckForUpdateTests.cs" />
+    <Compile Include="Helpers\PackageRepositoryFactories.cs" />
+    <Compile Include="Helpers\Packages.cs" />
+    <Compile Include="Helpers\VersionLocators.cs" />
+    <Compile Include="PerpareUpdateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

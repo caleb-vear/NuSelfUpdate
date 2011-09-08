@@ -5,14 +5,14 @@ namespace NuSelfUpdate
     public class AppUpdater
     {
         readonly string _packageSource;
-        readonly string _packageName;
+        readonly string _packageId;
         readonly IPackageRepositoryFactory _packageRepositoryFactory;
         readonly IVersionLocator _versionLocator;
 
-        public AppUpdater(string packageSource, string packageName, IPackageRepositoryFactory packageRepositoryFactory, IVersionLocator versionLocator)
+        public AppUpdater(string packageSource, string packageId, IPackageRepositoryFactory packageRepositoryFactory, IVersionLocator versionLocator)
         {
             _packageSource = packageSource;
-            _packageName = packageName;
+            _packageId = packageId;
             _packageRepositoryFactory = packageRepositoryFactory;
             _versionLocator = versionLocator;
         }
@@ -21,7 +21,7 @@ namespace NuSelfUpdate
         {
             var currentVersion = _versionLocator.CurrentVersion;
             var repository = _packageRepositoryFactory.CreateRepository(_packageSource);
-            var latestPackage = repository.FindPackage(_packageName);
+            var latestPackage = repository.FindPackage(_packageId);
 
             return new UpdateCheck { UpdateAvailable = currentVersion < latestPackage.Version };
         }
