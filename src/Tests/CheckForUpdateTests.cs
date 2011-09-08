@@ -83,5 +83,26 @@ namespace NuSelfUpdate.Tests
                 updateCheck.UpdateAvailable.ShouldBe(true);
             }
         }
+
+        [TestFixture]
+        public class WhenMultipleUpdatesAreaAvailable
+        {
+            [Test]
+            public void UpdateAvailableShouldBeTrue()
+            {
+                var installedVersion = new Version(1, 0, 0, 0);
+                var newVersion = new Version(1, 1, 0, 0);
+                var newestVersion = new Version(1, 2, 0, 0);
+
+                var packages = CreatePacakges(installedVersion, newVersion, newestVersion);
+                var packageRepositoryFactory = CreatePackageRepositoryFactory(packages);
+
+                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, CreateVersionLocator(installedVersion));
+
+                var updateCheck = updater.CheckForUpdate();
+
+                updateCheck.UpdateAvailable.ShouldBe(true);
+            }
+        }
     }
 }
