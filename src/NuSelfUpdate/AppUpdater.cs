@@ -32,17 +32,25 @@ namespace NuSelfUpdate
             if (update == null)
                 throw new ArgumentNullException("update");
 
+            AssertCanUpdate(_versionLocator.CurrentVersion, update.Package.Version);
+
             return null;
+        }
+
+        private void AssertCanUpdate(Version currentVersion, Version targetVersion)
+        {
+            if (targetVersion <= _versionLocator.CurrentVersion)
+                throw new BackwardUpdateException(_versionLocator.CurrentVersion, targetVersion);
         }
     }
 
     public interface IUpdate
     {
-
+        IPackage Package { get; }
     }
 
     public interface IPreparedUpdate
     {
-        
+
     }
 }

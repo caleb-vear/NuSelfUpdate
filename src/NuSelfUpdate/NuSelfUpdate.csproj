@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUpdater.cs" />
+    <Compile Include="BackwardUpdateException.cs" />
     <Compile Include="IUpdateCheck.cs" />
     <Compile Include="IVersionLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
