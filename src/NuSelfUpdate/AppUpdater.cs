@@ -1,4 +1,5 @@
-﻿using NuGet;
+﻿using System;
+using NuGet;
 
 namespace NuSelfUpdate
 {
@@ -25,5 +26,23 @@ namespace NuSelfUpdate
 
             return new UpdateCheck { UpdateAvailable = currentVersion < latestPackage.Version };
         }
+
+        public IPreparedUpdate PrepareUpdate(IUpdate update)
+        {
+            if (update == null)
+                throw new ArgumentNullException("update");
+
+            return null;
+        }
+    }
+
+    public interface IUpdate
+    {
+
+    }
+
+    public interface IPreparedUpdate
+    {
+        
     }
 }
