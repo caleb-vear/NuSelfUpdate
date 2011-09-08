@@ -20,8 +20,7 @@ namespace NuSelfUpdate.Tests
 
                 var updater = AppUpdaters.Build(installedVersion, Packages.FromVersions(AppUpdaters.DefaultPackageId, installedVersion, newVersion));
 
-                IUpdate update = null;
-                Should.Throw<ArgumentNullException>(() => updater.PrepareUpdate(update));
+                Should.Throw<ArgumentNullException>(() => updater.PrepareUpdate(null));
             }
         }
 
@@ -35,10 +34,8 @@ namespace NuSelfUpdate.Tests
                 var packages = Packages.FromVersions(AppUpdaters.DefaultPackageId, installedVersion);
                 var updater = AppUpdaters.Build(installedVersion, packages);
 
-                var update = Substitute.For<IUpdate>();
-                update.Package.Returns(packages.First());
-
-                Should.Throw<BackwardUpdateException>(() => updater.PrepareUpdate(update));
+                var package = packages.First();
+                Should.Throw<BackwardUpdateException>(() => updater.PrepareUpdate(package));
             }
         }
 
@@ -53,11 +50,8 @@ namespace NuSelfUpdate.Tests
                 var packages = Packages.FromVersions(AppUpdaters.DefaultPackageId, oldVersion, installedVersion);
                 var updater = AppUpdaters.Build(installedVersion, packages);
 
-                var update = Substitute.For<IUpdate>();
                 var oldPackage = packages.First(p => p.Version == oldVersion);
-                update.Package.Returns(oldPackage);
-
-                Should.Throw<BackwardUpdateException>(() => updater.PrepareUpdate(update));
+                Should.Throw<BackwardUpdateException>(() => updater.PrepareUpdate(oldPackage));
             }
         }
     }

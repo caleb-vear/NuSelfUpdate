@@ -27,12 +27,12 @@ namespace NuSelfUpdate
             return new UpdateCheck { UpdateAvailable = currentVersion < latestPackage.Version };
         }
 
-        public IPreparedUpdate PrepareUpdate(IUpdate update)
+        public IPreparedUpdate PrepareUpdate(IPackage package)
         {
-            if (update == null)
-                throw new ArgumentNullException("update");
+            if (package == null)
+                throw new ArgumentNullException("package");
 
-            AssertCanUpdate(_versionLocator.CurrentVersion, update.Package.Version);
+            AssertCanUpdate(_versionLocator.CurrentVersion, package.Version);
 
             return null;
         }
@@ -42,11 +42,6 @@ namespace NuSelfUpdate
             if (targetVersion <= _versionLocator.CurrentVersion)
                 throw new BackwardUpdateException(_versionLocator.CurrentVersion, targetVersion);
         }
-    }
-
-    public interface IUpdate
-    {
-        IPackage Package { get; }
     }
 
     public interface IPreparedUpdate
