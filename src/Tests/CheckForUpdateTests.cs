@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using NuGet;
 using NUnit.Framework;
 using System;
 using NuSelfUpdate.Tests.Helpers;
@@ -15,12 +17,11 @@ namespace NuSelfUpdate.Tests
             public void UpdateAvailableShouldBeFalse()
             {
                 var installedVersion = new Version(1, 0, 0, 0);
-                var packageId = "package";
 
-                var packages = Packages.FromVersions(packageId, installedVersion).Concat(Packages.FromVersions("Other.Package", new Version(1,1,0,0)));
-                var packageRepositoryFactory = PackageRepositoryFactories.Create(packages);
+                var packages = Packages.FromVersions(AppUpdaters.DefaultPackageId, installedVersion)
+                    .Concat(Packages.FromVersions("Other.Package", new Version(1,1,0,0)));
 
-                var updater = new AppUpdater("repository", packageId, packageRepositoryFactory, VersionLocators.Create(installedVersion));
+                var updater = AppUpdaters.Build(installedVersion, packages);
 
                 var updateCheck = updater.CheckForUpdate();
 
@@ -37,10 +38,8 @@ namespace NuSelfUpdate.Tests
                 var installedVersion = new Version(1, 0, 0, 0);
                 var newVersion = new Version(1, 1, 0, 0);
 
-                var packages = Packages.FromVersions("package", installedVersion, newVersion);
-                var packageRepositoryFactory = PackageRepositoryFactories.Create(packages);
-
-                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, VersionLocators.Create(installedVersion));
+                var packages = Packages.FromVersions(AppUpdaters.DefaultPackageId, installedVersion, newVersion);
+                var updater = AppUpdaters.Build(installedVersion, packages);
 
                 var updateCheck = updater.CheckForUpdate();
 
@@ -58,10 +57,8 @@ namespace NuSelfUpdate.Tests
                 var newVersion = new Version(1, 1, 0, 0);
                 var newestVersion = new Version(1, 2, 0, 0);
 
-                var packages = Packages.FromVersions("package", installedVersion, newVersion, newestVersion);
-                var packageRepositoryFactory = PackageRepositoryFactories.Create(packages);
-
-                var updater = new AppUpdater("repository", "package", packageRepositoryFactory, VersionLocators.Create(installedVersion));
+                var packages = Packages.FromVersions(AppUpdaters.DefaultPackageId, installedVersion, newVersion, newestVersion);
+                var updater = AppUpdaters.Build(installedVersion, packages);
 
                 var updateCheck = updater.CheckForUpdate();
 
