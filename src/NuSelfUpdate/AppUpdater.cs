@@ -24,7 +24,7 @@ namespace NuSelfUpdate
             var repository = _packageRepositoryFactory.CreateRepository(_packageSource);
             var latestPackage = repository.FindPackage(_packageId);
 
-            return new UpdateCheck { UpdateAvailable = currentVersion < latestPackage.Version };
+            return currentVersion < latestPackage.Version ? new UpdateFound(latestPackage) : (IUpdateCheck)new UpdateNotFound();
         }
 
         public IPreparedUpdate PrepareUpdate(IPackage package)

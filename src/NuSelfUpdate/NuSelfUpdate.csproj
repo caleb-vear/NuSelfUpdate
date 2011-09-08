@@ -49,7 +49,8 @@
     <Compile Include="IUpdateCheck.cs" />
     <Compile Include="IVersionLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpdateCheck.cs" />
+    <Compile Include="UpdateFound.cs" />
+    <Compile Include="UpdateNotFound.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
