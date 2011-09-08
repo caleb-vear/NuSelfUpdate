@@ -19,7 +19,7 @@ namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
             _installedVersion = new Version(1, 0, 0, 0);
         }
 
-        void AndGivenNoNewerPackagesHaveBeenPublishedWithTheTargetPackageId()
+        void AndGivenNoNewerPackagesHaveBeenPublishedWithTheAppPackageId()
         {
             _packages = Packages.FromVersions(AppUpdaters.DefaultPackageId, _installedVersion);
         }

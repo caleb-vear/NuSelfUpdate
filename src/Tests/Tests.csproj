@@ -82,6 +82,7 @@
     <Compile Include="Helpers\Run.cs" />
     <Compile Include="Helpers\VersionLocators.cs" />
     <Compile Include="PrepareUpdateBehaviour\NoPackageIsProvided.cs" />
+    <Compile Include="PrepareUpdateBehaviour\PackageIdIsNotAppPackage.cs" />
     <Compile Include="PrepareUpdateBehaviour\PackageIsForAVersionOlderThanTheCurrentlyInstalledVersion.cs" />
     <Compile Include="PrepareUpdateBehaviour\PackageIsForTheCurrentlyInstalledVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
