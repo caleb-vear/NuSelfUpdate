@@ -28,7 +28,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
             _incorrectPackage = Packages.FromVersions("Not.Target.Id", new Version(1, 1)).First();
         }
 
-        void WhenPreparePackageIsCalled()
+        void WhenTheUpdateIsPrepared()
         {
             _exception = Run.CatchingException(() => _appUpdater.PrepareUpdate(_incorrectPackage));
         }

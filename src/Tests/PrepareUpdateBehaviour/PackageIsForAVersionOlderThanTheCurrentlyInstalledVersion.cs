@@ -28,7 +28,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
             _oldVersionPackage = Packages.FromVersions(AppUpdaters.DefaultPackageId, new Version(0,1)).Single();
         }
 
-        void WhenPreparePackageIsCalled()
+        void WhenTheUpdateIsPrepared()
         {
             _exception = Run.CatchingException(() => _appUpdater.PrepareUpdate(_oldVersionPackage));
         }
