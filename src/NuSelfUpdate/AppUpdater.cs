@@ -1,5 +1,6 @@
 ﻿using System;
 using NuGet;
+using System.IO;
 
 namespace NuSelfUpdate
 {
@@ -10,16 +11,16 @@ namespace NuSelfUpdate
         readonly IPackageRepositoryFactory _packageRepositoryFactory;
         readonly IVersionLocator _versionLocator;
         readonly IPrepDirectoryStrategy _prepDirectoryStrategy;
-        readonly IPackageFileSaver _packageFileSaver;
+        readonly IFileSystem _fileSystem;
 
-        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IVersionLocator versionLocator, IPrepDirectoryStrategy prepDirectoryStrategy, IPackageFileSaver packageFileSaver)
+        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IVersionLocator versionLocator, IPrepDirectoryStrategy prepDirectoryStrategy, IFileSystem fileSystem)
         {
             _packageSource = packageSource;
             _appPackageId = appPackageId;
             _packageRepositoryFactory = packageRepositoryFactory;
             _versionLocator = versionLocator;
             _prepDirectoryStrategy = prepDirectoryStrategy;
-            _packageFileSaver = packageFileSaver;
+            _fileSystem = fileSystem;
         }
 
         public IUpdateCheck CheckForUpdate()
@@ -40,9 +41,10 @@ namespace NuSelfUpdate
 
             var prepDirectory = _prepDirectoryStrategy.GetFor(package.Version);
 
-            foreach (var file in package.GetFiles("app"))
+            foreach (var packageFile in package.GetFiles("app"))
             {
-                _packageFileSaver.Save(file, prepDirectory);
+                var targetPath = Path.Combine(prepDirectory, Path.GetFileName(packageFile.Path));
+                _fileSystem.AddFile(targetPath, packageFile.GetStream());
             }
 
             return null;
@@ -53,11 +55,6 @@ namespace NuSelfUpdate
             if (targetVersion <= _versionLocator.CurrentVersion)
                 throw new BackwardUpdateException(_versionLocator.CurrentVersion, targetVersion);
         }
-    }
-
-    public interface IPackageFileSaver
-    {
-        void Save(IPackageFile file, string directory);
     }
 
     public interface IPrepDirectoryStrategy

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using NSubstitute;
 using NuGet;
 using NuSelfUpdate.Tests.Helpers;
+using Shouldly;
 
 namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
 {
@@ -14,7 +16,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
         IPackage _package;
         IEnumerable<IPackageFile> _appFiles;
         IEnumerable<IPackageFile> _otherFiles;
-        IPackageFileSaver _packageFileSaver;
+        MockFileSystem _fileSystem;
 
         void GivenAnInstalledVersion()
         {
@@ -23,8 +25,8 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
 
         void AndGivenAnAppUpdater()
         {
-            _packageFileSaver = Substitute.For<IPackageFileSaver>();
-            _appUpdater = AppUpdaters.Build(_installedVersion, Enumerable.Empty<IPackage>(), _packageFileSaver);
+            _fileSystem = new MockFileSystem();
+            _appUpdater = AppUpdaters.Build(_installedVersion, Enumerable.Empty<IPackage>(), _fileSystem);
         }
 
         void AndGivenAPackageForANewerVersionOfTheApp()
@@ -41,28 +43,41 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
         {
             _appUpdater.PrepareUpdate(_package);
         }
-
+        
         void ThenAllFilesInThePackagesAppDirectoryWillBeSavedToTheUpgradePrepPath()
         {
             var prepDirectory = TestPrepDirectoryStrategy.Instance.GetFor(_package.Version);
 
-            foreach (var file in _appFiles)
-                _packageFileSaver.Received().Save(file, prepDirectory);
+            var expectedFiles = new Dictionary<string, string>()
+                                    {
+                                        {@"c:\app-updates\1.1\app.exe", "0 - app.exe"},
+                                        {@"c:\app-updates\1.1\app.exe.config", "1 - app.exe.config"},
+                                        {@"c:\app-updates\1.1\nuget.dll", "2 - nuget.dll"},
+                                    };
+
+            foreach (var expectedFile in expectedFiles)
+            {
+                _fileSystem.ReadAllText(expectedFile.Key)
+                    .ShouldBe(expectedFile.Value);
+            }
         }
 
         void AndNoOtherFilesWillHaveBeenSaved()
         {
-            foreach (var file in _otherFiles)
-                _packageFileSaver.DidNotReceive().Save(file, Arg.Any<string>());
+            _fileSystem.Paths.Where(f => f.Value != null).Count().ShouldBe(3);
         }
 
         IEnumerable<IPackageFile> GetAppFileSubstitutes(string directory, params string[] fileNames)
         {
+            var index = 0;
+
             foreach (var fileName in fileNames)
             {
                 var file = Substitute.For<IPackageFile>();
                 file.Path.Returns(System.IO.Path.Combine(directory, fileName));
+                var fileBytes = Encoding.UTF8.GetBytes(index++ + " - " + fileName);
 
+                file.GetStream().Returns(callInfo => new System.IO.MemoryStream(fileBytes));
                 yield return file;
             }
         }
