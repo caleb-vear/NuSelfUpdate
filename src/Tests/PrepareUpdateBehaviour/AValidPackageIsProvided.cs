@@ -18,6 +18,8 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
         IEnumerable<IPackageFile> _otherFiles;
         TestUpdaterConfig _config;
         MockFileSystem _fileSystem;
+        IPreparedUpdate _preparedUpdate;
+        List<string> _expectedFiles;
 
         void GivenAnInstalledVersion()
         {
@@ -43,22 +45,22 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
 
         void WhenTheUpdateIsPrepared()
         {
-            _appUpdater.PrepareUpdate(_package);
+            _preparedUpdate =  _appUpdater.PrepareUpdate(_package);
         }
         
         void ThenAllFilesInThePackagesAppDirectoryWillBeSavedToTheUpgradePrepPath()
         {
-            var expectedFiles = new Dictionary<string, string>()
-                                    {
-                                        {@"c:\app\.updates\1.1\app.exe", "0 - app.exe"},
-                                        {@"c:\app\.updates\1.1\app.exe.config", "1 - app.exe.config"},
-                                        {@"c:\app\.updates\1.1\nuget.dll", "2 - nuget.dll"},
-                                    };
+            _expectedFiles = new List<string>()
+                                 {
+                                     @"c:\app\.updates\1.1\app.exe",
+                                     @"c:\app\.updates\1.1\app.exe.config",
+                                     @"c:\app\.updates\1.1\nuget.dll",
+                                 };
 
-            foreach (var expectedFile in expectedFiles)
+            foreach (var expectedFile in _expectedFiles)
             {
-                _fileSystem.ReadAllText(expectedFile.Key)
-                    .ShouldBe(expectedFile.Value);
+                _fileSystem.ReadAllText(expectedFile)
+                    .ShouldBe(Encoding.UTF8.GetString(GetMockFileBytes(expectedFile)));
             }
         }
 
@@ -67,19 +69,35 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
             _fileSystem.Paths.Where(f => f.Value != null).Count().ShouldBe(3);
         }
 
+        void AndThePreparedUpdateWillHaveTheCorrectVersion()
+        {
+            _preparedUpdate.Version.ShouldBe(_package.Version);
+        }
+
+        void AndThePreparedUpdateWillListTheSavedFiles()
+        {
+            var sortedExpextedFiles = _expectedFiles.OrderBy(f => f);
+            _preparedUpdate.Files
+                .OrderBy(f => f)
+                .ShouldBe(sortedExpextedFiles);
+        }
+
         IEnumerable<IPackageFile> GetAppFileSubstitutes(string directory, params string[] fileNames)
         {
-            var index = 0;
-
             foreach (var fileName in fileNames)
             {
                 var file = Substitute.For<IPackageFile>();
                 file.Path.Returns(System.IO.Path.Combine(directory, fileName));
-                var fileBytes = Encoding.UTF8.GetBytes(index++ + " - " + fileName);
 
-                file.GetStream().Returns(callInfo => new System.IO.MemoryStream(fileBytes));
+                file.GetStream().Returns(callInfo => new System.IO.MemoryStream(GetMockFileBytes(file.Path)));
                 yield return file;
             }
+        }
+
+        static byte[] GetMockFileBytes(string fileName)
+        {
+            fileName = System.IO.Path.GetFileName(fileName);
+            return Encoding.UTF8.GetBytes(fileName.Length + " - " + fileName);
         }
     }
 }

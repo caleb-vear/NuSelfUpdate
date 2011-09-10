@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NuGet;
 using System.IO;
 
@@ -40,14 +42,17 @@ namespace NuSelfUpdate
             AssertCanUpdate(_appVersionProvider.CurrentVersion, package.Version);
 
             var prepDirectory = _prepDirectoryStrategy.GetFor(package.Version);
+            var preparedFiles = new List<string>();
 
             foreach (var packageFile in package.GetFiles("app"))
             {
-                var targetPath = Path.Combine(prepDirectory, Path.GetFileName(packageFile.Path));
+                var targetPath = Path.Combine(prepDirectory, Path.GetFileName(packageFile.Path));                
                 _fileSystem.AddFile(targetPath, packageFile.GetStream());
+
+                preparedFiles.Add(targetPath);
             }
 
-            return null;
+            return new PreparedUpdate(package.Version, preparedFiles);
         }
 
         private void AssertCanUpdate(Version currentVersion, Version targetVersion)
@@ -60,10 +65,5 @@ namespace NuSelfUpdate
     public interface IPrepDirectoryStrategy
     {
         string GetFor(Version updateVersion);
-    }
-
-    public interface IPreparedUpdate
-    {
-
     }
 }
