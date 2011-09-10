@@ -10,7 +10,6 @@ namespace NuSelfUpdate
         public string AppPackageId { get; set; }
         public IPackageRepositoryFactory PackageRepositoryFactory { get; set; }
         public IAppVersionProvider AppVersionProvider { get; set; }
-        public IPrepDirectoryStrategy UpdatePrepDirectoryStrategy { get; set; }
         public IExtendedFileSystem FileSystem { get; set; }
         public virtual string AppDirectory
         {

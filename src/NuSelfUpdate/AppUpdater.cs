@@ -12,7 +12,6 @@ namespace NuSelfUpdate
         readonly string _appPackageId;
         readonly IPackageRepositoryFactory _packageRepositoryFactory;
         readonly IAppVersionProvider _appVersionProvider;
-        readonly IPrepDirectoryStrategy _prepDirectoryStrategy;
         readonly IExtendedFileSystem _fileSystem;
         readonly string _appDirectory;
 
@@ -22,7 +21,6 @@ namespace NuSelfUpdate
             _appPackageId = config.AppPackageId;
             _packageRepositoryFactory = config.PackageRepositoryFactory;
             _appVersionProvider = config.AppVersionProvider;
-            _prepDirectoryStrategy = config.UpdatePrepDirectoryStrategy;
             _fileSystem = config.FileSystem;
             _appDirectory = config.AppDirectory;
         }
@@ -43,7 +41,7 @@ namespace NuSelfUpdate
 
             AssertCanUpdate(package.Version);
 
-            var prepDirectory = _prepDirectoryStrategy.GetFor(package.Version);
+            var prepDirectory = Path.Combine(_appDirectory, ".updates", package.Version.ToString());
             var preparedFiles = new List<string>();
 
             foreach (var packageFile in package.GetFiles("app"))
@@ -83,10 +81,5 @@ namespace NuSelfUpdate
             if (targetVersion <= _appVersionProvider.CurrentVersion)
                 throw new BackwardUpdateException(_appVersionProvider.CurrentVersion, targetVersion);
         }        
-    }
-
-    public interface IPrepDirectoryStrategy
-    {
-        string GetFor(Version updateVersion);
     }
 }

@@ -22,7 +22,6 @@ namespace NuSelfUpdate.Tests.Helpers
             PackageRepositoryFactory = PackageRepositoryFactories.Create(Enumerable.Empty<IPackage>());
             AppVersionProvider = Substitute.For<IAppVersionProvider>();
             AppVersionProvider.CurrentVersion.Returns(installedVersion);
-            UpdatePrepDirectoryStrategy = new TestPrepDirectoryStrategy();
             FileSystem = new MockFileSystem();
         }
     }
