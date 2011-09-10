@@ -9,23 +9,23 @@ namespace NuSelfUpdate
         readonly string _packageSource;
         readonly string _appPackageId;
         readonly IPackageRepositoryFactory _packageRepositoryFactory;
-        readonly IVersionLocator _versionLocator;
+        readonly IAppVersionProvider _appVersionProvider;
         readonly IPrepDirectoryStrategy _prepDirectoryStrategy;
         readonly IFileSystem _fileSystem;
 
-        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IVersionLocator versionLocator, IPrepDirectoryStrategy prepDirectoryStrategy, IFileSystem fileSystem)
+        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IAppVersionProvider appVersionProvider, IPrepDirectoryStrategy prepDirectoryStrategy, IFileSystem fileSystem)
         {
             _packageSource = packageSource;
             _appPackageId = appPackageId;
             _packageRepositoryFactory = packageRepositoryFactory;
-            _versionLocator = versionLocator;
+            _appVersionProvider = appVersionProvider;
             _prepDirectoryStrategy = prepDirectoryStrategy;
             _fileSystem = fileSystem;
         }
 
         public IUpdateCheck CheckForUpdate()
         {
-            var currentVersion = _versionLocator.CurrentVersion;
+            var currentVersion = _appVersionProvider.CurrentVersion;
             var repository = _packageRepositoryFactory.CreateRepository(_packageSource);
             var latestPackage = repository.FindPackage(_appPackageId);
 
@@ -37,7 +37,7 @@ namespace NuSelfUpdate
             if (package == null || package.Id != _appPackageId)
                 throw new ArgumentNullException("package");
 
-            AssertCanUpdate(_versionLocator.CurrentVersion, package.Version);
+            AssertCanUpdate(_appVersionProvider.CurrentVersion, package.Version);
 
             var prepDirectory = _prepDirectoryStrategy.GetFor(package.Version);
 
@@ -52,8 +52,8 @@ namespace NuSelfUpdate
 
         private void AssertCanUpdate(Version currentVersion, Version targetVersion)
         {
-            if (targetVersion <= _versionLocator.CurrentVersion)
-                throw new BackwardUpdateException(_versionLocator.CurrentVersion, targetVersion);
+            if (targetVersion <= _appVersionProvider.CurrentVersion)
+                throw new BackwardUpdateException(_appVersionProvider.CurrentVersion, targetVersion);
         }
     }
 

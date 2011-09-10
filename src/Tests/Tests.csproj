@@ -82,7 +82,7 @@
     <Compile Include="Helpers\Packages.cs" />
     <Compile Include="Helpers\Run.cs" />
     <Compile Include="Helpers\TestPrepDirectoryStrategy.cs" />
-    <Compile Include="Helpers\VersionLocators.cs" />
+    <Compile Include="Helpers\AppVersionProviders.cs" />
     <Compile Include="PrepareUpdateBehaviour\AValidPackageIsProvided.cs" />
     <Compile Include="PrepareUpdateBehaviour\NoPackageIsProvided.cs" />
     <Compile Include="PrepareUpdateBehaviour\PackageIdIsNotAppPackage.cs" />

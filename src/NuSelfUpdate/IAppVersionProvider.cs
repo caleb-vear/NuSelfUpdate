@@ -2,7 +2,7 @@
 
 namespace NuSelfUpdate
 {
-    public interface IVersionLocator
+    public interface IAppVersionProvider
     {
         Version CurrentVersion { get; }
     }

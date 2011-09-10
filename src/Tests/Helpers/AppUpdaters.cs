@@ -17,7 +17,7 @@ namespace NuSelfUpdate.Tests.Helpers
         public static AppUpdater Build(Version installedVersion, IEnumerable<IPackage> availablePackages, IFileSystem fileSystem)
         {
             var packageRepositoryFactory = PackageRepositoryFactories.Create(availablePackages);
-            var versionLocator = VersionLocators.Create(installedVersion);
+            var versionLocator = AppVersionProviders.Create(installedVersion);
 
             return new AppUpdater(DefaultRepositoryName, DefaultPackageId, packageRepositoryFactory, versionLocator, TestPrepDirectoryStrategy.Instance, fileSystem);
         }
