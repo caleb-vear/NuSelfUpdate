@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppUpdater.cs" />
+    <Compile Include="AppUpdaterConfig.cs" />
     <Compile Include="BackwardUpdateException.cs" />
     <Compile Include="ExtendedPhysicalFileSystem.cs" />
     <Compile Include="IExtendedFileSystem.cs" />

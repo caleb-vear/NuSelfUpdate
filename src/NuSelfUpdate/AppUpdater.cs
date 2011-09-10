@@ -13,14 +13,14 @@ namespace NuSelfUpdate
         readonly IPrepDirectoryStrategy _prepDirectoryStrategy;
         readonly IExtendedFileSystem _fileSystem;
 
-        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IAppVersionProvider appVersionProvider, IPrepDirectoryStrategy prepDirectoryStrategy, IExtendedFileSystem fileSystem)
+        public AppUpdater(AppUpdaterConfig config)
         {
-            _packageSource = packageSource;
-            _appPackageId = appPackageId;
-            _packageRepositoryFactory = packageRepositoryFactory;
-            _appVersionProvider = appVersionProvider;
-            _prepDirectoryStrategy = prepDirectoryStrategy;
-            _fileSystem = fileSystem;
+            _packageSource = config.PackageSource;
+            _appPackageId = config.AppPackageId;
+            _packageRepositoryFactory = config.PackageRepositoryFactory;
+            _appVersionProvider = config.AppVersionProvider;
+            _prepDirectoryStrategy = config.UpdatePrepDirectoryStrategy;
+            _fileSystem = config.FileSystem;
         }
 
         public IUpdateCheck CheckForUpdate()

@@ -13,7 +13,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
 
         void GivenAnAppUpdater()
         {
-            _appUpdater = AppUpdaters.Build(new Version(1, 0), Enumerable.Empty<IPackage>());
+            _appUpdater = new AppUpdater(new TestUpdaterConfig(new Version(1, 0)));
         }
 
         void WhenPrepareUpdateIsCalledWithoutProvidingAPackage()

@@ -16,6 +16,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
         IPackage _package;
         IEnumerable<IPackageFile> _appFiles;
         IEnumerable<IPackageFile> _otherFiles;
+        TestUpdaterConfig _config;
         MockFileSystem _fileSystem;
 
         void GivenAnInstalledVersion()
@@ -25,13 +26,14 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
 
         void AndGivenAnAppUpdater()
         {
-            _fileSystem = new MockFileSystem();
-            _appUpdater = AppUpdaters.Build(_installedVersion, Enumerable.Empty<IPackage>(), _fileSystem);
+            _config = new TestUpdaterConfig(_installedVersion);
+            _fileSystem = (MockFileSystem) _config.FileSystem;
+            _appUpdater = new AppUpdater(_config);
         }
 
         void AndGivenAPackageForANewerVersionOfTheApp()
         {
-            _package = Packages.FromVersions(AppUpdaters.DefaultPackageId, new Version(1, 1)).Single();
+            _package = Packages.FromVersions(_config.AppPackageId, new Version(1, 1)).Single();
             _appFiles = GetAppFileSubstitutes("app", "app.exe", "app.exe.config", "nuget.dll").ToArray();
             _otherFiles = GetAppFileSubstitutes("", "README.md").ToArray();
 
@@ -46,13 +48,11 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
         
         void ThenAllFilesInThePackagesAppDirectoryWillBeSavedToTheUpgradePrepPath()
         {
-            var prepDirectory = TestPrepDirectoryStrategy.Instance.GetFor(_package.Version);
-
             var expectedFiles = new Dictionary<string, string>()
                                     {
-                                        {@"c:\app-updates\1.1\app.exe", "0 - app.exe"},
-                                        {@"c:\app-updates\1.1\app.exe.config", "1 - app.exe.config"},
-                                        {@"c:\app-updates\1.1\nuget.dll", "2 - nuget.dll"},
+                                        {@"c:\app\.updates\1.1\app.exe", "0 - app.exe"},
+                                        {@"c:\app\.updates\1.1\app.exe.config", "1 - app.exe.config"},
+                                        {@"c:\app\.updates\1.1\nuget.dll", "2 - nuget.dll"},
                                     };
 
             foreach (var expectedFile in expectedFiles)
