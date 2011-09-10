@@ -7,7 +7,7 @@ using NuGet;
 
 namespace NuSelfUpdate.Tests.Helpers
 {
-    public class MockFileSystem : IFileSystem
+    public class MockFileSystem : IExtendedFileSystem
     {
         private ILogger _logger;
 
@@ -134,6 +134,20 @@ namespace NuSelfUpdate.Tests.Helpers
                         .Where(f => !String.IsNullOrEmpty(f) &&
                                Path.GetDirectoryName(f).Equals(path, StringComparison.OrdinalIgnoreCase))
                         .Distinct();
+        }
+
+        public virtual void MoveFile(string sourcePath, string destinationPath)
+        {
+            Func<Stream> factory;
+
+            if (!Paths.TryGetValue(sourcePath, out factory))
+                throw new FileNotFoundException(sourcePath + " not found.");
+
+            if (Paths.ContainsKey(destinationPath))
+                throw new IOException(destinationPath + " Already exists");
+
+            Paths.Remove(sourcePath);
+            Paths[destinationPath] = factory;
         }
 
         public virtual void AddFile(string path)

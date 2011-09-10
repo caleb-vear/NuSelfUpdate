@@ -14,7 +14,7 @@ namespace NuSelfUpdate.Tests.Helpers
             return Build(installedVersion, availablePackages, new MockFileSystem());
         }
 
-        public static AppUpdater Build(Version installedVersion, IEnumerable<IPackage> availablePackages, IFileSystem fileSystem)
+        public static AppUpdater Build(Version installedVersion, IEnumerable<IPackage> availablePackages, IExtendedFileSystem fileSystem)
         {
             var packageRepositoryFactory = PackageRepositoryFactories.Create(availablePackages);
             var versionLocator = AppVersionProviders.Create(installedVersion);

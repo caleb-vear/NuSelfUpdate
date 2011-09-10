@@ -11,9 +11,9 @@ namespace NuSelfUpdate
         readonly IPackageRepositoryFactory _packageRepositoryFactory;
         readonly IAppVersionProvider _appVersionProvider;
         readonly IPrepDirectoryStrategy _prepDirectoryStrategy;
-        readonly IFileSystem _fileSystem;
+        readonly IExtendedFileSystem _fileSystem;
 
-        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IAppVersionProvider appVersionProvider, IPrepDirectoryStrategy prepDirectoryStrategy, IFileSystem fileSystem)
+        public AppUpdater(string packageSource, string appPackageId, IPackageRepositoryFactory packageRepositoryFactory, IAppVersionProvider appVersionProvider, IPrepDirectoryStrategy prepDirectoryStrategy, IExtendedFileSystem fileSystem)
         {
             _packageSource = packageSource;
             _appPackageId = appPackageId;
