@@ -14,6 +14,7 @@ namespace NuSelfUpdate
         readonly IAppVersionProvider _appVersionProvider;
         readonly IPrepDirectoryStrategy _prepDirectoryStrategy;
         readonly IExtendedFileSystem _fileSystem;
+        readonly string _appDirectory;
 
         public AppUpdater(AppUpdaterConfig config)
         {
@@ -23,6 +24,7 @@ namespace NuSelfUpdate
             _appVersionProvider = config.AppVersionProvider;
             _prepDirectoryStrategy = config.UpdatePrepDirectoryStrategy;
             _fileSystem = config.FileSystem;
+            _appDirectory = config.AppDirectory;
         }
 
         public IUpdateCheck CheckForUpdate()
@@ -58,6 +60,20 @@ namespace NuSelfUpdate
         public void ApplyPreparedUpdate(IPreparedUpdate preparedUpdate)
         {
             AssertCanUpdate(preparedUpdate.Version);
+
+            foreach (var filePath in preparedUpdate.Files)
+            {
+                var fileName = Path.GetFileName(filePath);
+                var appFilePath = Path.Combine(_appDirectory, fileName);
+                if (_fileSystem.FileExists(appFilePath))
+                {
+                    _fileSystem.MoveFile(appFilePath, Path.Combine(_appDirectory, ".old", fileName));
+                }
+
+                _fileSystem.MoveFile(filePath, appFilePath);
+            }
+
+            _fileSystem.DeleteDirectory(Path.Combine(_appDirectory, ".updates"), true);
         }
 
         private void AssertCanUpdate(Version targetVersion)

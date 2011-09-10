@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsANewerVerion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForAnOlderAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="CheckForUpdateBehaviour\MultipleUpdatesAreAvailable.cs" />

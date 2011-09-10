@@ -1,4 +1,6 @@
-﻿using NuGet;
+﻿using System.IO;
+using System.Reflection;
+using NuGet;
 
 namespace NuSelfUpdate
 {
@@ -10,5 +12,12 @@ namespace NuSelfUpdate
         public IAppVersionProvider AppVersionProvider { get; set; }
         public IPrepDirectoryStrategy UpdatePrepDirectoryStrategy { get; set; }
         public IExtendedFileSystem FileSystem { get; set; }
+        public virtual string AppDirectory
+        {
+            get
+            {
+                return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            }
+        }
     }
 }

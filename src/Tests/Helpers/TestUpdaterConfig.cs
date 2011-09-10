@@ -10,6 +10,11 @@ namespace NuSelfUpdate.Tests.Helpers
     {
         public IEnumerable<IPackage> PublishedPackages {set { PackageRepositoryFactory = PackageRepositoryFactories.Create(value); }}
 
+        public override string AppDirectory
+        {
+            get { return @"c:\app\"; }
+        }
+
         public TestUpdaterConfig(Version installedVersion)
         {
             PackageSource = "repository";
