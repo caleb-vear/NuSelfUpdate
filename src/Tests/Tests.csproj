@@ -72,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForAnOlderAppVersion.cs" />
+    <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="CheckForUpdateBehaviour\MultipleUpdatesAreAvailable.cs" />
     <Compile Include="CheckForUpdateBehaviour\NoUpdatesAvailable.cs" />
     <Compile Include="BddifyTest.cs" />

@@ -39,7 +39,7 @@ namespace NuSelfUpdate
             if (package == null || package.Id != _appPackageId)
                 throw new ArgumentNullException("package");
 
-            AssertCanUpdate(_appVersionProvider.CurrentVersion, package.Version);
+            AssertCanUpdate(package.Version);
 
             var prepDirectory = _prepDirectoryStrategy.GetFor(package.Version);
             var preparedFiles = new List<string>();
@@ -55,11 +55,16 @@ namespace NuSelfUpdate
             return new PreparedUpdate(package.Version, preparedFiles);
         }
 
-        private void AssertCanUpdate(Version currentVersion, Version targetVersion)
+        public void ApplyPreparedUpdate(IPreparedUpdate preparedUpdate)
+        {
+            AssertCanUpdate(preparedUpdate.Version);
+        }
+
+        private void AssertCanUpdate(Version targetVersion)
         {
             if (targetVersion <= _appVersionProvider.CurrentVersion)
                 throw new BackwardUpdateException(_appVersionProvider.CurrentVersion, targetVersion);
-        }
+        }        
     }
 
     public interface IPrepDirectoryStrategy
