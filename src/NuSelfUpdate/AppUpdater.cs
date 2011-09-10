@@ -57,7 +57,7 @@ namespace NuSelfUpdate
             return new PreparedUpdate(package.Version, preparedFiles);
         }
 
-        public void ApplyPreparedUpdate(IPreparedUpdate preparedUpdate)
+        public InstalledUpdate ApplyPreparedUpdate(IPreparedUpdate preparedUpdate)
         {
             AssertCanUpdate(preparedUpdate.Version);
 
@@ -74,6 +74,8 @@ namespace NuSelfUpdate
             }
 
             _fileSystem.DeleteDirectory(Path.Combine(_appDirectory, ".updates"), true);
+
+            return new InstalledUpdate(_appVersionProvider.CurrentVersion, preparedUpdate.Version);
         }
 
         private void AssertCanUpdate(Version targetVersion)

@@ -13,7 +13,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         const string PrepDir = @"c:\app\.updates\1.1\";
         const string AppDirectory = @"c:\app\";
         const string OldDir = @"c:\app\.old\";
-        Version _installedVersion;
+        Version _preUpdateVersion;
         TestUpdaterConfig _config;
         MockFileSystem _fileSystem;
         string[] _appFiles;
@@ -21,18 +21,19 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         AppUpdater _appUpdater;
         string[] _newAppFiles;
         Version _newVersion;
+        InstalledUpdate _installedUpdated;
 
         void GivenAnInstalledVersion()
         {
-            _installedVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_installedVersion);
+            _preUpdateVersion = new Version(1, 0);
+            _config = new TestUpdaterConfig(_preUpdateVersion);
             _fileSystem = (MockFileSystem)_config.FileSystem;
 
             _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db" };
 
             foreach (var file in _appFiles)
             {
-                _fileSystem.AddFile(Path.Combine(AppDirectory, file), MockFileContent(file, _installedVersion));
+                _fileSystem.AddFile(Path.Combine(AppDirectory, file), MockFileContent(file, _preUpdateVersion));
             }
         }
 
@@ -60,16 +61,16 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
 
         void WhenThePreparedUpdateIsApplied()
         {
-            _appUpdater.ApplyPreparedUpdate(_preparedUpdate);
+            _installedUpdated = _appUpdater.ApplyPreparedUpdate(_preparedUpdate);
         }
 
         void ThenAllAppFilesThatHaveNewerVersionsWillBeMovedIntoTheOldDirectory()
         {
             var expectedOldDirFiles = new Dictionary<string, Version>
                                           {
-                                              {"app.exe", _installedVersion},
-                                              {"app.exe.config", _installedVersion},
-                                              {"nuget.dll", _installedVersion},
+                                              {"app.exe", _preUpdateVersion},
+                                              {"app.exe.config", _preUpdateVersion},
+                                              {"nuget.dll", _preUpdateVersion},
                                           };
 
             VerifyDirectoryFiles(OldDir, expectedOldDirFiles);
@@ -83,7 +84,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
                                               {AppDirectory + "app.exe.config", _newVersion},
                                               {AppDirectory + "nuget.dll", _newVersion},
                                               {AppDirectory + "app.core.dll", _newVersion},
-                                              {AppDirectory + "data.db", _installedVersion},
+                                              {AppDirectory + "data.db", _preUpdateVersion},
                                           };
 
             VerifyDirectoryFiles(AppDirectory, expectedAppDirFiles);
@@ -92,6 +93,12 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         void AndThePrepDirectoryWillBeDeleted()
         {
             _fileSystem.DirectoryExists(PrepDir).ShouldBe(false);
+        }
+
+        void AndTheInstalledUpdateWillHaveTheOldVersionAndNewVersionPropertiesSetCorrectly()
+        {
+            _installedUpdated.OldVersion.ShouldBe(_preUpdateVersion);
+            _installedUpdated.NewVersion.ShouldBe(_newVersion);
         }
 
         void VerifyFile(string file, Version version)

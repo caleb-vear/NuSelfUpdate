@@ -49,6 +49,7 @@
     <Compile Include="BackwardUpdateException.cs" />
     <Compile Include="ExtendedPhysicalFileSystem.cs" />
     <Compile Include="IExtendedFileSystem.cs" />
+    <Compile Include="InstalledUpdate.cs" />
     <Compile Include="IPreparedUpdate.cs" />
     <Compile Include="IUpdateCheck.cs" />
     <Compile Include="IAppVersionProvider.cs" />
