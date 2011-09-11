@@ -8,8 +8,8 @@
     <ProjectGuid>{662C9A68-8B3A-49C6-A841-59773E61318B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sample</RootNamespace>
-    <AssemblyName>Sample</AssemblyName>
+    <RootNamespace>NuSelfUpdate.Sample</RootNamespace>
+    <AssemblyName>NuSelfUpdate.Sample</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
