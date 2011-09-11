@@ -1,6 +1,7 @@
 bin
 obj
 Debug
+build
 *TestResult*
 *.suo
 *.LDF
