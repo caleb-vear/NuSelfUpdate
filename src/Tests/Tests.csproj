@@ -78,6 +78,7 @@
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\TheLastOldVersionHasNotBeenCleanedUp.cs" />
     <Compile Include="CheckForUpdateBehaviour\MultipleUpdatesAreAvailable.cs" />
+    <Compile Include="CheckForUpdateBehaviour\NoPackagesHaveEverBeenPublished.cs" />
     <Compile Include="CheckForUpdateBehaviour\NoUpdatesAvailable.cs" />
     <Compile Include="BddifyTest.cs" />
     <Compile Include="CheckForUpdateBehaviour\UpdateIsAvailable.cs" />
