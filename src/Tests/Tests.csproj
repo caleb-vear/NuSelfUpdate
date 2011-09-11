@@ -72,9 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyPreparedUpdateBehaviour\ApplyUpdateTest.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsANewerVerion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForAnOlderAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
+    <Compile Include="ApplyPreparedUpdateBehaviour\TheLastOldVersionHasNotBeenCleanedUp.cs" />
     <Compile Include="CheckForUpdateBehaviour\MultipleUpdatesAreAvailable.cs" />
     <Compile Include="CheckForUpdateBehaviour\NoUpdatesAvailable.cs" />
     <Compile Include="BddifyTest.cs" />

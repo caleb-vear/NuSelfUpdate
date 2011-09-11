@@ -8,14 +8,10 @@ using Shouldly;
 
 namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
 {
-    public class PreparedUpdateIsANewerVerion : BddifyTest
+    public class PreparedUpdateIsANewerVerion : ApplyUpdateTest
     {
-        const string PrepDir = @"c:\app\.updates\1.1\";
-        const string AppDirectory = @"c:\app\";
-        const string OldDir = @"c:\app\.old\";
         Version _preUpdateVersion;
         TestUpdaterConfig _config;
-        MockFileSystem _fileSystem;
         string[] _appFiles;
         IPreparedUpdate _preparedUpdate;
         AppUpdater _appUpdater;
@@ -27,13 +23,13 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         {
             _preUpdateVersion = new Version(1, 0);
             _config = new TestUpdaterConfig(_preUpdateVersion);
-            _fileSystem = (MockFileSystem)_config.FileSystem;
+            FileSystem = (MockFileSystem)_config.FileSystem;
 
             _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db" };
 
             foreach (var file in _appFiles)
             {
-                _fileSystem.AddFile(Path.Combine(AppDirectory, file), MockFileContent(file, _preUpdateVersion));
+                FileSystem.AddFile(Path.Combine(AppDirectory, file), MockFileContent(file, _preUpdateVersion));
             }
         }
 
@@ -44,11 +40,11 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
             _preparedUpdate.Version.Returns(_newVersion);
 
             _newAppFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "app.core.dll" };
-            _fileSystem.CreateDirectory(@"c:\app\.updates\1.1");
+            FileSystem.CreateDirectory(@"c:\app\.updates\1.1");
 
             foreach (var file in _newAppFiles)
             {
-                _fileSystem.AddFile(Path.Combine(PrepDir, file), MockFileContent(file, _newVersion));
+                FileSystem.AddFile(Path.Combine(PrepDir, file), MockFileContent(file, _newVersion));
             }
 
             _preparedUpdate.Files.Returns(_newAppFiles.Select(file => Path.Combine(PrepDir, file)));
@@ -80,11 +76,11 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         {
             var expectedAppDirFiles = new Dictionary<string, Version>
                                           {
-                                              {AppDirectory + "app.exe", _newVersion},
-                                              {AppDirectory + "app.exe.config", _newVersion},
-                                              {AppDirectory + "nuget.dll", _newVersion},
-                                              {AppDirectory + "app.core.dll", _newVersion},
-                                              {AppDirectory + "data.db", _preUpdateVersion},
+                                              {"app.exe", _newVersion},
+                                              {"app.exe.config", _newVersion},
+                                              {"nuget.dll", _newVersion},
+                                              {"app.core.dll", _newVersion},
+                                              {"data.db", _preUpdateVersion},
                                           };
 
             VerifyDirectoryFiles(AppDirectory, expectedAppDirFiles);
@@ -92,34 +88,13 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
 
         void AndThePrepDirectoryWillBeDeleted()
         {
-            _fileSystem.DirectoryExists(PrepDir).ShouldBe(false);
+            FileSystem.DirectoryExists(PrepDir).ShouldBe(false);
         }
 
         void AndTheInstalledUpdateWillHaveTheOldVersionAndNewVersionPropertiesSetCorrectly()
         {
             _installedUpdated.OldVersion.ShouldBe(_preUpdateVersion);
             _installedUpdated.NewVersion.ShouldBe(_newVersion);
-        }
-
-        void VerifyFile(string file, Version version)
-        {
-            _fileSystem.ReadAllText(file).ShouldBe(MockFileContent(Path.GetFileName(file), version));
-        }
-
-        void VerifyDirectoryFiles(string directory, IDictionary<string, Version> expectedFiles)
-        {
-            foreach (var file in expectedFiles)
-            {
-                VerifyFile(Path.Combine(directory, file.Key), file.Value);
-            }
-
-            ShouldBeTestExtensions.ShouldBe(_fileSystem.GetFiles(directory)
-                              .All(expectedFiles.ContainsKey), true);
-        }
-
-        static string MockFileContent(string file, Version version)
-        {
-            return file + " - v" + version;
         }
     }
 }

@@ -59,13 +59,18 @@ namespace NuSelfUpdate
         {
             AssertCanUpdate(preparedUpdate.Version);
 
+            var oldVersionDir = Path.Combine(_appDirectory, ".old");
+
+            if (_fileSystem.DirectoryExists(oldVersionDir))
+                _fileSystem.DeleteDirectory(oldVersionDir, true);
+
             foreach (var filePath in preparedUpdate.Files)
             {
                 var fileName = Path.GetFileName(filePath);
                 var appFilePath = Path.Combine(_appDirectory, fileName);
                 if (_fileSystem.FileExists(appFilePath))
                 {
-                    _fileSystem.MoveFile(appFilePath, Path.Combine(_appDirectory, ".old", fileName));
+                    _fileSystem.MoveFile(appFilePath, Path.Combine(oldVersionDir, fileName));
                 }
 
                 _fileSystem.MoveFile(filePath, appFilePath);

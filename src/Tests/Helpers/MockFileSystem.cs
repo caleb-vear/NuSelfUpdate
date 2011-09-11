@@ -73,6 +73,8 @@ namespace NuSelfUpdate.Tests.Helpers
 
         public virtual IEnumerable<string> GetFiles(string path)
         {
+            path = Path.GetDirectoryName(path);
+
             return Paths.Select(f => f.Key)
                         .Where(f => Path.GetDirectoryName(f).Equals(path, StringComparison.OrdinalIgnoreCase));
         }
