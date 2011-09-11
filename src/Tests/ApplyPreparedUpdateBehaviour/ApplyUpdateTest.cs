@@ -34,7 +34,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
 
         protected static string MockFileContent(string file, Version version)
         {
-            return file + " - v" + version;
+            return Path.GetFileName(file) + " - v" + version;
         }
     }
 }

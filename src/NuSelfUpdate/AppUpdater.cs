@@ -46,7 +46,7 @@ namespace NuSelfUpdate
 
             foreach (var packageFile in package.GetFiles("app"))
             {
-                var targetPath = Path.Combine(prepDirectory, Path.GetFileName(packageFile.Path));                
+                var targetPath = Path.Combine(prepDirectory, Get(packageFile.Path, relativeTo: "app"));
                 _fileSystem.AddFile(targetPath, packageFile.GetStream());
 
                 preparedFiles.Add(targetPath);
@@ -60,13 +60,15 @@ namespace NuSelfUpdate
             AssertCanUpdate(preparedUpdate.Version);
 
             var oldVersionDir = Path.Combine(_appDirectory, ".old");
+            var basePrepDir = Path.Combine(_appDirectory, ".updates");
+            var prepDir = Path.Combine(basePrepDir, preparedUpdate.Version.ToString());
 
             if (_fileSystem.DirectoryExists(oldVersionDir))
                 _fileSystem.DeleteDirectory(oldVersionDir, true);
 
             foreach (var filePath in preparedUpdate.Files)
             {
-                var fileName = Path.GetFileName(filePath);
+                var fileName = Get(filePath, relativeTo: prepDir);
                 var appFilePath = Path.Combine(_appDirectory, fileName);
                 if (_fileSystem.FileExists(appFilePath))
                 {
@@ -76,9 +78,24 @@ namespace NuSelfUpdate
                 _fileSystem.MoveFile(filePath, appFilePath);
             }
 
-            _fileSystem.DeleteDirectory(Path.Combine(_appDirectory, ".updates"), true);
+            _fileSystem.DeleteDirectory(basePrepDir, true);
 
             return new InstalledUpdate(_appVersionProvider.CurrentVersion, preparedUpdate.Version);
+        }
+
+        string Get(string path, string relativeTo)
+        {
+            var pathSegments = new List<string>();
+            var relativeToParentDir = Path.GetDirectoryName(relativeTo);
+
+            var ignoreCase = StringComparison.InvariantCultureIgnoreCase;
+            while (!relativeToParentDir.Equals(Path.GetDirectoryName(path), ignoreCase))
+            {
+                pathSegments.Add(Path.GetFileName(path));
+                path = Path.GetDirectoryName(path);
+            }
+
+            return Path.Combine(pathSegments.AsEnumerable().Reverse().ToArray());
         }
 
         private void AssertCanUpdate(Version targetVersion)

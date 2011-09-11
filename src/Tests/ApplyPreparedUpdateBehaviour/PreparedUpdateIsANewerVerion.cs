@@ -25,7 +25,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
             _config = new TestUpdaterConfig(_preUpdateVersion);
             FileSystem = (MockFileSystem)_config.FileSystem;
 
-            _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db" };
+            _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db", "content\\logo.png" };
 
             foreach (var file in _appFiles)
             {
@@ -39,7 +39,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
             _newVersion = new Version(1, 1);
             _preparedUpdate.Version.Returns(_newVersion);
 
-            _newAppFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "app.core.dll" };
+            _newAppFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "app.core.dll", "content\\logo.png" };
             FileSystem.CreateDirectory(@"c:\app\.updates\1.1");
 
             foreach (var file in _newAppFiles)
@@ -67,6 +67,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
                                               {"app.exe", _preUpdateVersion},
                                               {"app.exe.config", _preUpdateVersion},
                                               {"nuget.dll", _preUpdateVersion},
+                                              {"content\\logo.png", _preUpdateVersion},
                                           };
 
             VerifyDirectoryFiles(OldDir, expectedOldDirFiles);
@@ -80,6 +81,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
                                               {"app.exe.config", _newVersion},
                                               {"nuget.dll", _newVersion},
                                               {"app.core.dll", _newVersion},
+                                              {"content\\logo.png", _newVersion},
                                               {"data.db", _preUpdateVersion},
                                           };
 

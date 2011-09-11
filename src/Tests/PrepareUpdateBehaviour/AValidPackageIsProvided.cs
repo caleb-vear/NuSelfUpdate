@@ -36,7 +36,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
         void AndGivenAPackageForANewerVersionOfTheApp()
         {
             _package = Packages.FromVersions(_config.AppPackageId, new Version(1, 1)).Single();
-            _appFiles = GetAppFileSubstitutes("app", "app.exe", "app.exe.config", "nuget.dll").ToArray();
+            _appFiles = GetAppFileSubstitutes("app", "app.exe", "app.exe.config", "nuget.dll", @"content\logo.png").ToArray();
             _otherFiles = GetAppFileSubstitutes("", "README.md").ToArray();
 
             var packageFiles = _appFiles.Concat(_otherFiles);
@@ -55,6 +55,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
                                      @"c:\app\.updates\1.1\app.exe",
                                      @"c:\app\.updates\1.1\app.exe.config",
                                      @"c:\app\.updates\1.1\nuget.dll",
+                                     @"c:\app\.updates\1.1\content\logo.png",
                                  };
 
             foreach (var expectedFile in _expectedFiles)
@@ -66,7 +67,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
 
         void AndNoOtherFilesWillHaveBeenSaved()
         {
-            _fileSystem.Paths.Where(f => f.Value != null).Count().ShouldBe(3);
+            _fileSystem.Paths.Where(f => f.Value != null).Count().ShouldBe(_expectedFiles.Count);
         }
 
         void AndThePreparedUpdateWillHaveTheCorrectVersion()
