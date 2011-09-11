@@ -7,7 +7,7 @@ namespace NuSelfUpdate
     public class AppUpdaterConfig
     {
         public string PackageSource { get; set; }
-        public string AppPackageId { get; set; }
+        public string AppPackageId { get; private set; }
         public IPackageRepositoryFactory PackageRepositoryFactory { get; set; }
         public IAppVersionProvider AppVersionProvider { get; set; }
         public IExtendedFileSystem FileSystem { get; set; }
@@ -17,6 +17,15 @@ namespace NuSelfUpdate
             {
                 return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             }
+        }
+
+        public AppUpdaterConfig(string appPackageId)
+        {
+            AppPackageId = appPackageId;
+            PackageSource = NuGetConstants.DefaultFeedUrl;
+            PackageRepositoryFactory = new AppUpdaterRepositoryFactory();
+            AppVersionProvider = new EntryAssemblyAppVersionProvider();
+            FileSystem = new ExtendedPhysicalFileSystem(AppDirectory);
         }
     }
 }

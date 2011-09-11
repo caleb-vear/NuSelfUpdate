@@ -15,10 +15,9 @@ namespace NuSelfUpdate.Tests.Helpers
             get { return @"c:\app\"; }
         }
 
-        public TestUpdaterConfig(Version installedVersion)
+        public TestUpdaterConfig(Version installedVersion) : base("package")
         {
             PackageSource = "repository";
-            AppPackageId = "package";
             PackageRepositoryFactory = PackageRepositoryFactories.Create(Enumerable.Empty<IPackage>());
             AppVersionProvider = Substitute.For<IAppVersionProvider>();
             AppVersionProvider.CurrentVersion.Returns(installedVersion);
