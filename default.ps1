@@ -34,7 +34,16 @@ task UpdateVersion {
         -version $version
 }
 
-task RunSampleInit -depends FullClean, UpdateVersion {    
+task ResetVersion {
+	Generate-Assembly-Info `
+        -file  "$base_dir\src\Sample\Properties\AssemblyInfo.cs" `
+        -product "NuSelfUpdate.Sample" `
+        -copyright "Copyright © Caleb Vear 2011" `
+        -company "Caleb Vear" `
+        -version "1.0.0.0"
+}
+
+task RunSampleInit -depends FullClean, ResetVersion {    
 	new-item $build_dir -itemType directory
 	new-item $buildartifacts_dir -itemType directory
 	new-item $sample_dir -itemType directory
@@ -82,7 +91,7 @@ task BuildPackage -depends PreparePackageFiles {
 	start-process $nugetExe $nugetArguments -Wait -NoNewWindow
 }
 
-task PublishNewVersion -depends PublishInit, BuildPackage {
+task PublishNewVersion -depends PublishInit, BuildPackage, ResetVersion {
 	Move-Item "$prepPackage_dir\*.nupkg" "$samplePackage_dir"
 }
 
