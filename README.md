@@ -17,6 +17,7 @@ If your looking for something to do you can always check out [issues page](https
 to see what features or bugs need some work.  If you have an awesome idea feel free to submit an [issue](https://github.com/caleb-vear/NuSelfUpdate/issues/new), but pull requests are best.
 
 You can clone/fork NuSelfUpdate with either git or mercurial:
+
 * [github](https://github.com/caleb-vear/NuSelfUpdate)
 * [bitbucket](https://bitbucket.org/calebvear/nuselfupdate)
 
