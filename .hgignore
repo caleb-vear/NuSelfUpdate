@@ -12,5 +12,4 @@ glob:Source/Shell/publish/
 *\TestResult.xml
 *.csproj.VisualState.xml
 *\App_Data\*
-bin/*
-Release/*
+build/*

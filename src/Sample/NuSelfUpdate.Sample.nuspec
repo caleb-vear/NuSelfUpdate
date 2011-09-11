@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NuSelfUpdate.Sample</id>
+	<version>1.0.0.0</version>
+    <authors>Caleb Vear</authors>
+    <owners>Caleb Vear</owners>
+    <licenseUrl>https://github.com/caleb-vear/NuSelfUpdate/raw/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/caleb-vear/NuSelfUpdate/</projectUrl>
+    <description>A sample showing how you can use NuSelfUpdate</description>
+    <copyright>Copyright 2011</copyright>
+    <tags>Update</tags>
+  </metadata>
+</package>
