@@ -12,5 +12,10 @@ namespace NuSelfUpdate
             OldVersion = old;
             NewVersion = newVersion;
         }
+
+        public override string ToString()
+        {
+            return "Installed Update: " + OldVersion + " -> " + NewVersion;
+        }
     }
 }

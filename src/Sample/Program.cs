@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -20,14 +21,15 @@ namespace NuSelfUpdate.Sample
 
             var appUpdater = new AppUpdater(config);
 
-            Observable.Interval(TimeSpan.FromSeconds(5), Scheduler.TaskPool)
+            var installedUpdates = Observable.Interval(TimeSpan.FromSeconds(5), Scheduler.TaskPool)
                 .Select(_ => appUpdater.CheckForUpdate())
                 .Do(Console.WriteLine)
                 .Where(check => check.UpdateAvailable)
+                .Take(1) // We only want to prepare the update once
                 .Select(uc => appUpdater.PrepareUpdate(uc.UpdatePackage))
                 .Do(Console.WriteLine)
                 .Select(appUpdater.ApplyPreparedUpdate)
-                .Do(Console.WriteLine)                
+                .Do(Console.WriteLine)
                 .Subscribe(Relaunch);
 
             Console.WriteLine("NuSelfUpdate.Sample - version: " + config.AppVersionProvider.CurrentVersion);
@@ -43,6 +45,8 @@ namespace NuSelfUpdate.Sample
         static void Relaunch(InstalledUpdate installedUpdate)
         {
             Console.WriteLine("Relaunching the app...");
+            Process.Start(Environment.CommandLine.Replace("\"", ""));
+            Environment.Exit(0);
         }
 
         static string FullPath(string relativePath)
