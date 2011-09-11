@@ -23,6 +23,7 @@ namespace NuSelfUpdate.Sample
             Observable.Interval(TimeSpan.FromSeconds(5), Scheduler.TaskPool)
                 .Select(_ => appUpdater.CheckForUpdate())
                 .Do(Console.WriteLine)
+                .Where(check => check.UpdateAvailable)
                 .Select(uc => appUpdater.PrepareUpdate(uc.UpdatePackage))
                 .Do(Console.WriteLine)
                 .Select(appUpdater.ApplyPreparedUpdate)
@@ -41,7 +42,7 @@ namespace NuSelfUpdate.Sample
 
         static void Relaunch(InstalledUpdate installedUpdate)
         {
-            
+            Console.WriteLine("Relaunching the app...");
         }
 
         static string FullPath(string relativePath)
