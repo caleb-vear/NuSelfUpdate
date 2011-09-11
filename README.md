@@ -10,10 +10,15 @@ is run it will be the new version. To top it all off you can easily relaunch
 the new version of the application with the same command line arguments the
 app was originally with.
 
-Source Repositories
--------------------
-git: [github](https://github.com/caleb-vear/NuSelfUpdate)
- hg: [bitbucket](https://bitbucket.org/calebvear/nuselfupdate)
+Contributing
+------------
+Contributions are welcome; fork NuSelfUpdate and submit a pull request :) 
+If your looking for something to do you can always check out [issues page](https://github.com/caleb-vear/NuSelfUpdate/issues)
+to see what features or bugs need some work.  If you have an awesome idea feel free to submit an [issue](https://github.com/caleb-vear/NuSelfUpdate/issues/new), but pull requests are best.
+
+You can clone/fork NuSelfUpdate with either git or mercurial:
+* [github](https://github.com/caleb-vear/NuSelfUpdate)
+* [bitbucket](https://bitbucket.org/calebvear/nuselfupdate)
 
 An Example
 ----------
