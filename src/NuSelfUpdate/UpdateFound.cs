@@ -13,5 +13,10 @@ namespace NuSelfUpdate
         {
             UpdatePackage = updatePackage;
         }
+
+        public override string ToString()
+        {
+            return "UpdateCheck: v" + UpdatePackage.Version + " update found";
+        }
     }
 }

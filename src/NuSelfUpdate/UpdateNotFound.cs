@@ -13,5 +13,10 @@ namespace NuSelfUpdate
         {
             get { return null; }
         }
+
+        public override string ToString()
+        {
+            return "UpdateCheck: No update found";
+        }
     }
 }
