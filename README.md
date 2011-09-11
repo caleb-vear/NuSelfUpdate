@@ -16,24 +16,25 @@ An Example
 This example shows what we are aiming for.
 
 ```c#
+    
     static void Main()
     {
-        var selfUpdater = CreateSelfUpdater();
+        var appUpdater = CreateAppUpdater();
         
 		// This will run the UpdateDatabase method if this is the first 
 		// time we have run the application after an update is installed.
-        if (selfUpdater.JustInstalledUpdates)
+        if (appUpdater.JustInstalledUpdates)
 		{
 			UpgradeDatabase();
-			selfUpdater.RemoveOldFilesAndClearJustInstalledUpdates();
+			appUpdater.RemoveOldFilesAndClearJustInstalledUpdates();
 		}
         
-        var updateCheck = selfUpdater.CheckForUpdate();
+        var updateCheck = appUpdater.CheckForUpdate();
         
         if (updateCheck.UpdateAvailable)
         {
-            var preparedUpdate = selfUpdater.PrepareUpdate(updateCheck.Update);
-            var installedUpdate = selfUpdater.ApplyPreparedUpdate(preparedUpdate);
+            var preparedUpdate = appUpdater.PrepareUpdate(updateCheck.Update);
+            var installedUpdate = appUpdater.ApplyPreparedUpdate(preparedUpdate);
             // Runs the new version of the application with the same command
             // line arguments that we were initially given.
             selfUpdated.LaunchInstalledUpdate(installedUpdate);
@@ -43,10 +44,10 @@ This example shows what we are aiming for.
         DoYourApplicationStuff();
     }    
 
-    SelfUpdater CreateSelfUpdater()
+    AppUpdater CreateSelfUpdater()
     {
         // Some configuration code here:
-        return new SelfUpdater();
+        return new AppUpdater(new AppUpdaterConfig("NuSelfUpdate.Sample"));
     }
 
     void UpgradeDatabase()
