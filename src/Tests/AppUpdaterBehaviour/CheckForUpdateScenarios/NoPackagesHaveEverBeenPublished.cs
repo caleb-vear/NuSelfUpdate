@@ -4,14 +4,12 @@ using System.Linq;
 using NuGet;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
-using Enumerable = System.Linq.Enumerable;
 
-namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.CheckForUpdateScenarios
 {
-    public class UpdateIsAvailable : BddifyTest
+    public class NoPackagesHaveEverBeenPublished
     {
         Version _installedVersion;
-        Version _newVersion;
         IEnumerable<IPackage> _packages;
         AppUpdater _updater;
         IUpdateCheck _updateCheck;
@@ -19,14 +17,19 @@ namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
 
         void GivenAnInstalledVersion()
         {
-            _installedVersion = new Version(1, 0);
+            _installedVersion = new Version(1, 0, 0, 0);
             _config = new TestUpdaterConfig(_installedVersion);
+
         }
 
-        void AndGivenAPackageForANewerVersionHasBeenPublished()
+        void AndGivenNoNewerPackagesHaveBeenPublishedWithTheAppPackageId()
         {
-            _newVersion = new Version(1, 1);
-            _packages = Packages.FromVersions(_config.AppPackageId, _installedVersion, _newVersion).ToList();
+            _packages = Packages.FromVersions(_config.AppPackageId, _installedVersion);
+        }
+
+        void AndGivenNoPackagesHaveBeenPublished()
+        {
+            _packages = Enumerable.Empty<IPackage>();
             _config.PublishedPackages = _packages;
         }
 
@@ -40,15 +43,14 @@ namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
             _updateCheck = _updater.CheckForUpdate();
         }
 
-        void ThenUpdateAvailableWillBeTrue()
+        void ThenTheUpdateChecksUpdateAvailableWillBeFalse()
         {
-            _updateCheck.UpdateAvailable.ShouldBe(true);
+            _updateCheck.UpdateAvailable.ShouldBe(false);
         }
 
-        void AndTheUpdatePackageWillBeTheNewVersion()
+        void AndTheUpdateCheckPackageWillBeNull()
         {
-            var newPackage = _packages.Single(p => p.Version == _newVersion);
-            _updateCheck.UpdatePackage.ShouldBe(newPackage);
-        }
+            _updateCheck.UpdatePackage.ShouldBe(null);
+        }        
     }
 }

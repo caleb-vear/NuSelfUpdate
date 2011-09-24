@@ -78,11 +78,12 @@
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForAnOlderAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\TheLastOldVersionHasNotBeenCleanedUp.cs" />
-    <Compile Include="CheckForUpdateBehaviour\MultipleUpdatesAreAvailable.cs" />
-    <Compile Include="CheckForUpdateBehaviour\NoPackagesHaveEverBeenPublished.cs" />
-    <Compile Include="CheckForUpdateBehaviour\NoUpdatesAvailable.cs" />
+    <Compile Include="AppUpdaterBehaviour\CheckForUpdates.cs" />
+    <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\ASinlgeUpdateIsAvailable.cs" />
+    <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\MultipleUpdatesAreAvailable.cs" />
+    <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\NoPackagesHaveEverBeenPublished.cs" />
+    <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\NoUpdatesAvailable.cs" />
     <Compile Include="BddifyTest.cs" />
-    <Compile Include="CheckForUpdateBehaviour\UpdateIsAvailable.cs" />
     <Compile Include="Helpers\TestUpdaterConfig.cs" />
     <Compile Include="Helpers\MockFileSystem.cs" />
     <Compile Include="Helpers\PackageRepositoryFactories.cs" />

@@ -4,15 +4,13 @@ using System.Linq;
 using NuGet;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
-using Enumerable = System.Linq.Enumerable;
 
-namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.CheckForUpdateScenarios
 {
-    public class MultipleUpdatesAreAvailable : BddifyTest
+    public class ASinlgeUpdateIsAvailable
     {
         Version _installedVersion;
         Version _newVersion;
-        Version _newestVersion;
         IEnumerable<IPackage> _packages;
         AppUpdater _updater;
         IUpdateCheck _updateCheck;
@@ -24,11 +22,10 @@ namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
             _config = new TestUpdaterConfig(_installedVersion);
         }
 
-        void AndGivenAPackageForMultipleNewerVersionHasBeenPublished()
+        void AndGivenAPackageForANewerVersionHasBeenPublished()
         {
             _newVersion = new Version(1, 1);
-            _newestVersion = new Version(1, 2);
-            _packages = Packages.FromVersions(_config.AppPackageId, _installedVersion, _newVersion, _newestVersion).ToList();
+            _packages = Packages.FromVersions(_config.AppPackageId, _installedVersion, _newVersion).ToList();
             _config.PublishedPackages = _packages;
         }
 
@@ -47,9 +44,9 @@ namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
             _updateCheck.UpdateAvailable.ShouldBe(true);
         }
 
-        void AndTheUpdatePackageWillBeTheNewestVersion()
+        void AndTheUpdatePackageWillBeTheNewVersion()
         {
-            var newPackage = _packages.Single(p => p.Version == _newestVersion);
+            var newPackage = _packages.Single(p => p.Version == _newVersion);
             _updateCheck.UpdatePackage.ShouldBe(newPackage);
         }
     }

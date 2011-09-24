@@ -5,9 +5,9 @@ using NuGet;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.CheckForUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.CheckForUpdateScenarios
 {
-    public class NoUpdatesAvailable : BddifyTest
+    public class NoUpdatesAvailable
     {
         Version _installedVersion;
         IEnumerable<IPackage> _packages;
