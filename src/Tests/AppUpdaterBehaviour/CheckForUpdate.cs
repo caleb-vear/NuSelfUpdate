@@ -9,7 +9,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour
         AsA = "As an application",
         IWant = "I want to check and see if there are new updates available",
         SoThat = "I can start the process of updating my self")]
-    public class CheckForUpdates
+    public class CheckForUpdate
     {
         [Test]
         public void NoPackagesHaveEverBeenPublished()

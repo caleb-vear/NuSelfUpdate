@@ -79,7 +79,7 @@
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\TheLastOldVersionHasNotBeenCleanedUp.cs" />
     <Compile Include="AppUpdaterBehaviour\PrepareUpdate.cs" />
-    <Compile Include="AppUpdaterBehaviour\CheckForUpdates.cs" />
+    <Compile Include="AppUpdaterBehaviour\CheckForUpdate.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\ASinlgeUpdateIsAvailable.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\MultipleUpdatesAreAvailable.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\NoPackagesHaveEverBeenPublished.cs" />
