@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
-using NuGet;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 {
-    public class NoPackageIsProvided : BddifyTest
+    public class NoPackageIsProvided
     {
         AppUpdater _appUpdater;
         Exception _exception;

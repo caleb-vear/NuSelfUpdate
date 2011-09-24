@@ -4,13 +4,13 @@ using NuGet;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 {
-    public class PackageIsForAVersionOlderThanTheCurrentlyInstalledVersion : BddifyTest
+    public class PackageIsForTheVersionWhichIsCurrentlyInstalled
     {
         Version _installedVersion;
         AppUpdater _appUpdater;
-        IPackage _oldVersionPackage;
+        IPackage _currentVersionPacakge;
         Exception _exception;
         TestUpdaterConfig _config;
 
@@ -25,14 +25,14 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
             _appUpdater = new AppUpdater(_config);
         }
 
-        void AndGivenAPackageForAnOlderVersion()
+        void AndGivenAPackageForTheCurrentlyInstalledVersion()
         {
-            _oldVersionPackage = Packages.FromVersions(_config.AppPackageId, new Version(0,1)).Single();
+            _currentVersionPacakge = Packages.FromVersions(_config.AppPackageId, _installedVersion).Single();
         }
 
         void WhenTheUpdateIsPrepared()
         {
-            _exception = Run.CatchingException(() => _appUpdater.PrepareUpdate(_oldVersionPackage));
+            _exception = Run.CatchingException(() => _appUpdater.PrepareUpdate(_currentVersionPacakge));
         }
 
         void ThenABackwardUpdateExceptionWillBeThrown()
@@ -40,7 +40,7 @@ namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
             _exception.ShouldBeTypeOf<BackwardUpdateException>();
             var backwardUpdate = _exception.As<BackwardUpdateException>();
             backwardUpdate.InstalledVersion.ShouldBe(_installedVersion);
-            backwardUpdate.TargetVersion.ShouldBe(_oldVersionPackage.Version);
+            backwardUpdate.TargetVersion.ShouldBe(_installedVersion);
         }
     }
 }

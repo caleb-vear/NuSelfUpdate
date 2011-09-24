@@ -78,22 +78,23 @@
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForAnOlderAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="ApplyPreparedUpdateBehaviour\TheLastOldVersionHasNotBeenCleanedUp.cs" />
+    <Compile Include="AppUpdaterBehaviour\PrepareUpdate.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdates.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\ASinlgeUpdateIsAvailable.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\MultipleUpdatesAreAvailable.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\NoPackagesHaveEverBeenPublished.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\NoUpdatesAvailable.cs" />
+    <Compile Include="AppUpdaterBehaviour\PrepareUpdateScenarios\AValidPackageIsProvided.cs" />
+    <Compile Include="AppUpdaterBehaviour\PrepareUpdateScenarios\NoPackageIsProvided.cs" />
+    <Compile Include="AppUpdaterBehaviour\PrepareUpdateScenarios\PacakgeIsForOldVersion.cs" />
+    <Compile Include="AppUpdaterBehaviour\PrepareUpdateScenarios\PackageIdIsNotForThisApplication.cs" />
+    <Compile Include="AppUpdaterBehaviour\PrepareUpdateScenarios\PackageIsForTheVersionWhichIsCurrentlyInstalled.cs" />
     <Compile Include="BddifyTest.cs" />
     <Compile Include="Helpers\TestUpdaterConfig.cs" />
     <Compile Include="Helpers\MockFileSystem.cs" />
     <Compile Include="Helpers\PackageRepositoryFactories.cs" />
     <Compile Include="Helpers\Packages.cs" />
     <Compile Include="Helpers\Run.cs" />
-    <Compile Include="PrepareUpdateBehaviour\AValidPackageIsProvided.cs" />
-    <Compile Include="PrepareUpdateBehaviour\NoPackageIsProvided.cs" />
-    <Compile Include="PrepareUpdateBehaviour\PackageIdIsNotAppPackage.cs" />
-    <Compile Include="PrepareUpdateBehaviour\PackageIsForAVersionOlderThanTheCurrentlyInstalledVersion.cs" />
-    <Compile Include="PrepareUpdateBehaviour\PackageIsForTheCurrentlyInstalledVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

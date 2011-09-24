@@ -4,9 +4,9 @@ using NuGet;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.PrepareUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 {
-    public class PackageIdIsNotAppPackage : BddifyTest
+    public class PackageIdIsNotForThisApplication
     {
         Version _installedVersion;
         AppUpdater _appUpdater;
