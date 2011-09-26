@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using NSubstitute;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 {
-    public class PreparedUpdateIsForAnOlderAppVersion : BddifyTest
+    public class PreparedUpdateIsForInstalledAppVersion
     {
         Version _installedVersion;
         IPreparedUpdate _preparedUpdate;
@@ -17,10 +17,10 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
             _installedVersion = new Version(1, 1);
         }
 
-        void AndGivenAPreparedUpdateForAnOlderVersion()
+        void AndGivenAPreparedUpdateForTheInstalledVersion()
         {
             _preparedUpdate = Substitute.For<IPreparedUpdate>();
-            _preparedUpdate.Version.Returns(new Version(1, 0));
+            _preparedUpdate.Version.Returns(_installedVersion);
         }
 
         void AndGivenAnAppUpdater()
@@ -36,10 +36,10 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         void ThenABackwardUpdateExceptionWillBeThrown()
         {
             _exception.ShouldBeTypeOf<BackwardUpdateException>();
-            var backwardUpdate = _exception as BackwardUpdateException;
+            var backwardUpdate = (BackwardUpdateException)_exception;
 
             backwardUpdate.InstalledVersion.ShouldBe(_installedVersion);
-            backwardUpdate.TargetVersion.ShouldBe(_preparedUpdate.Version);
+            backwardUpdate.TargetVersion.ShouldBe(_installedVersion);
         }
     }
 }

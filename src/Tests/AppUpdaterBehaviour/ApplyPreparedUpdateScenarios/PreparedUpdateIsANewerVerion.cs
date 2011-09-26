@@ -6,9 +6,9 @@ using NSubstitute;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 {
-    public class PreparedUpdateIsANewerVerion : ApplyUpdateTest
+    public class PreparedUpdateIsANewerVerion : BaseApplyUpdateScenario
     {
         Version _preUpdateVersion;
         TestUpdaterConfig _config;

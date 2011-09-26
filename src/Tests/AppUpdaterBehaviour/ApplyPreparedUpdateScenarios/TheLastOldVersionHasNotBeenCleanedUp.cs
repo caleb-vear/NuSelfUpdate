@@ -5,9 +5,9 @@ using NSubstitute;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 {
-    public class TheLastOldVersionHasNotBeenCleanedUp : ApplyUpdateTest
+    public class TheLastOldVersionHasNotBeenCleanedUp : BaseApplyUpdateScenario
     {
         Version _preUpdateVersion;
         TestUpdaterConfig _config;
@@ -66,7 +66,7 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
         void AndTheCruftFileWillHaveBeenDeleted()
         {
             FileSystem.FileExists(_cruftFile).ShouldBe(false);
-            FileSystem.GetFiles(OldDir).Count().ShouldBe(1);
+            ShouldBeTestExtensions.ShouldBe(FileSystem.GetFiles(OldDir).Count(), 1);
         }
     }
 }

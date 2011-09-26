@@ -34,5 +34,11 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour
         {
             new PackageIsForTheVersionWhichIsCurrentlyInstalled().Bddify();
         }
+
+        [Test]
+        public void AValidPackageIsProvided()
+        {
+            new AValidPackageIsProvided().Bddify();
+        }
     }
 }

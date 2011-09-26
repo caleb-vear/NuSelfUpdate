@@ -5,9 +5,9 @@ using System.Linq;
 using NuSelfUpdate.Tests.Helpers;
 using Shouldly;
 
-namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
+namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 {
-    public abstract class ApplyUpdateTest : BddifyTest
+    public abstract class BaseApplyUpdateScenario
     {
         protected const string PrepDir = @"c:\app\.updates\1.1\";
         protected const string AppDirectory = @"c:\app\";
@@ -27,9 +27,9 @@ namespace NuSelfUpdate.Tests.ApplyPreparedUpdateBehaviour
                 VerifyFile(Path.Combine(directory, file.Key), file.Value);
             }
 
-            FileSystem.GetFiles(directory)
-                .Select(Path.GetFileName)
-                .All(f => expectedFiles.ContainsKey(f)).ShouldBe(true);
+            ShouldBeTestExtensions.ShouldBe(FileSystem.GetFiles(directory)
+                                                                     .Select(Path.GetFileName)
+                                                                     .All(f => expectedFiles.ContainsKey(f)), true);
         }
 
         protected static string MockFileContent(string file, Version version)

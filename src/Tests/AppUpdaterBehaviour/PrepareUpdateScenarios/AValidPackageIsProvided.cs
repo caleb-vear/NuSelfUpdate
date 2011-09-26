@@ -9,7 +9,7 @@ using Shouldly;
 
 namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 {
-    public class AValidPackageIsProvided : BddifyTest
+    public class AValidPackageIsProvided
     {
         Version _installedVersion;
         AppUpdater _appUpdater;

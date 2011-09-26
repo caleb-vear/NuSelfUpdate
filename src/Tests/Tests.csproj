@@ -73,11 +73,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyPreparedUpdateBehaviour\ApplyUpdateTest.cs" />
-    <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsANewerVerion.cs" />
-    <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForAnOlderAppVersion.cs" />
-    <Compile Include="ApplyPreparedUpdateBehaviour\PreparedUpdateIsForInstalledAppVersion.cs" />
-    <Compile Include="ApplyPreparedUpdateBehaviour\TheLastOldVersionHasNotBeenCleanedUp.cs" />
+    <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdate.cs" />
+    <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\ApplyUpdateTest.cs" />
+    <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\PreparedUpdateIsANewerVerion.cs" />
+    <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\PreparedUpdateIsForAnOlderAppVersion.cs" />
+    <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\PreparedUpdateIsForInstalledAppVersion.cs" />
+    <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\TheLastOldVersionHasNotBeenCleanedUp.cs" />
     <Compile Include="AppUpdaterBehaviour\PrepareUpdate.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdate.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\ASinlgeUpdateIsAvailable.cs" />
