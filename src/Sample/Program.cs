@@ -21,7 +21,7 @@ namespace NuSelfUpdate.Sample
 
             var appUpdater = new AppUpdater(config);
 
-            var installedUpdates = Observable.Interval(TimeSpan.FromSeconds(5), Scheduler.TaskPool)
+            Observable.Interval(TimeSpan.FromSeconds(5), Scheduler.TaskPool)
                 .Select(_ => appUpdater.CheckForUpdate())
                 .Do(Console.WriteLine)
                 .Where(check => check.UpdateAvailable)
@@ -30,11 +30,14 @@ namespace NuSelfUpdate.Sample
                 .Do(Console.WriteLine)
                 .Select(appUpdater.ApplyPreparedUpdate)
                 .Do(Console.WriteLine)
-                .Subscribe(Relaunch);
+                .Select(appUpdater.LaunchInstalledUpdate)
+                .Subscribe(Quit);
 
             Console.WriteLine("NuSelfUpdate.Sample - version: " + config.AppVersionProvider.CurrentVersion);
             Console.WriteLine("Sample, will check for updates every 5 seconds.");
             Console.WriteLine("Drop a new package version into the packages\\NuSelfUpdate.Sample.<version> folder to update.");
+
+            PrintCommandLineArgs();
 
             Console.WriteLine();
             Console.WriteLine("Press enter to exit");
@@ -42,11 +45,17 @@ namespace NuSelfUpdate.Sample
             Console.ReadLine();
         }
 
-        static void Relaunch(InstalledUpdate installedUpdate)
+        static void Quit(InstalledUpdate installedUpdate)
         {
-            Console.WriteLine("Relaunching the app...");
-            Process.Start(Environment.CommandLine.Replace("\"", ""));
             Environment.Exit(0);
+        }
+
+        static void PrintCommandLineArgs()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Command Line Arguments: ({0})", Environment.GetCommandLineArgs().Length);
+            foreach (var arg in Environment.GetCommandLineArgs())
+                Console.WriteLine("\t: {0}", arg);
         }
 
         static string FullPath(string relativePath)

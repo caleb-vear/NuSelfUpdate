@@ -96,5 +96,5 @@ task PublishNewVersion -depends PublishInit, BuildPackage, ResetVersion {
 }
 
 task RunSample -depends RunSampleInit, CopyRunningSampleFiles {
-	start-process "$sample_dir\NuSelfUpdate.Sample.exe"
+	start-process "$sample_dir\NuSelfUpdate.Sample.exe" "-test -updatemode ""auto update"""
 }
