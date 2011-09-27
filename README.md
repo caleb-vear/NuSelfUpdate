@@ -48,7 +48,7 @@ NuSelfUpdate lets you write code like this:
             var installedUpdate = appUpdater.ApplyPreparedUpdate(preparedUpdate);
             // Runs the new version of the application with the same command
             // line arguments that we were initially given.
-            selfUpdated.LaunchInstalledUpdate(installedUpdate);
+            appUpdater.LaunchInstalledUpdate(installedUpdate);
             return;
         }
         
