@@ -79,6 +79,11 @@
     <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\PreparedUpdateIsForAnOlderAppVersion.cs" />
     <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\PreparedUpdateIsForInstalledAppVersion.cs" />
     <Compile Include="AppUpdaterBehaviour\ApplyPreparedUpdateScenarios\TheLastOldVersionHasNotBeenCleanedUp.cs" />
+    <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdate.cs" />
+    <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\CommandLineArgumentsWithoutSpaces.cs" />
+    <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\CommandLineArgumentsWithSpaces.cs" />
+    <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\ExePathContainsSpaces.cs" />
+    <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\NoCommandLineArguments.cs" />
     <Compile Include="AppUpdaterBehaviour\PrepareUpdate.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdate.cs" />
     <Compile Include="AppUpdaterBehaviour\CheckForUpdateScenarios\ASinlgeUpdateIsAvailable.cs" />

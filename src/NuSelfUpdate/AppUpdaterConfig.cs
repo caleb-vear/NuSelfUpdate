@@ -11,6 +11,8 @@ namespace NuSelfUpdate
         public IPackageRepositoryFactory PackageRepositoryFactory { get; set; }
         public IAppVersionProvider AppVersionProvider { get; set; }
         public IExtendedFileSystem FileSystem { get; set; }
+        public ICommandLineWrapper CommandLineWrapper { get; set; }
+        public IProcessWrapper ProcessWrapper { get; set; }
         public virtual string AppDirectory
         {
             get
@@ -26,6 +28,8 @@ namespace NuSelfUpdate
             PackageRepositoryFactory = new AppUpdaterRepositoryFactory();
             AppVersionProvider = new EntryAssemblyAppVersionProvider();
             FileSystem = new ExtendedPhysicalFileSystem(AppDirectory);
+            CommandLineWrapper = new CommandLineWrapperWrapper();
+            ProcessWrapper = new ProcessWrapperWrapper();
         }
     }
 }

@@ -14,6 +14,8 @@ namespace NuSelfUpdate
         readonly IAppVersionProvider _appVersionProvider;
         readonly IExtendedFileSystem _fileSystem;
         readonly string _appDirectory;
+        readonly ICommandLineWrapper _commandLineWrapper;
+        readonly IProcessWrapper _processWrapper;
 
         public AppUpdater(AppUpdaterConfig config)
         {
@@ -23,6 +25,8 @@ namespace NuSelfUpdate
             _appVersionProvider = config.AppVersionProvider;
             _fileSystem = config.FileSystem;
             _appDirectory = config.AppDirectory;
+            _commandLineWrapper = config.CommandLineWrapper;
+            _processWrapper = config.ProcessWrapper;
         }
 
         public IUpdateCheck CheckForUpdate()
@@ -105,6 +109,22 @@ namespace NuSelfUpdate
         {
             if (targetVersion <= _appVersionProvider.CurrentVersion)
                 throw new BackwardUpdateException(_appVersionProvider.CurrentVersion, targetVersion);
-        }        
+        }
+
+        public InstalledUpdate LaunchInstalledUpdate(InstalledUpdate installedUpdate)
+        {
+            var fullCmdLine = _commandLineWrapper.Full;
+            var arguments = _commandLineWrapper.Arguments;
+
+            var filename = arguments[0];
+            var cmdArguments = fullCmdLine.Substring(fullCmdLine.IndexOf(filename) + filename.Length);
+
+            if (cmdArguments.StartsWith("\""))
+                cmdArguments = cmdArguments.Substring(1);
+
+            _processWrapper.Start(filename, cmdArguments.Trim());
+
+            return installedUpdate;
+        }
     }
 }

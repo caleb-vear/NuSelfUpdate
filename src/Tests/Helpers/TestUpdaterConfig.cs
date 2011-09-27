@@ -22,6 +22,8 @@ namespace NuSelfUpdate.Tests.Helpers
             AppVersionProvider = Substitute.For<IAppVersionProvider>();
             AppVersionProvider.CurrentVersion.Returns(installedVersion);
             FileSystem = new MockFileSystem();
+            CommandLineWrapper = Substitute.For<ICommandLineWrapper>();
+            ProcessWrapper = Substitute.For<IProcessWrapper>();
         }
     }
 }

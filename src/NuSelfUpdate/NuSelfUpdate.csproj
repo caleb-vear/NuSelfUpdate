@@ -44,15 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProcessWrapperWrapper.cs" />
     <Compile Include="AppUpdater.cs" />
     <Compile Include="AppUpdaterConfig.cs" />
     <Compile Include="AppUpdaterRepositoryFactory.cs" />
     <Compile Include="BackwardUpdateException.cs" />
+    <Compile Include="CommandLineWrapperWrapper.cs" />
     <Compile Include="EntryAssemblyAppVersionProvider.cs" />
     <Compile Include="ExtendedPhysicalFileSystem.cs" />
+    <Compile Include="ICommandLineWrapper.cs" />
     <Compile Include="IExtendedFileSystem.cs" />
     <Compile Include="InstalledUpdate.cs" />
     <Compile Include="IPreparedUpdate.cs" />
+    <Compile Include="IProcessWrapper.cs" />
     <Compile Include="IUpdateCheck.cs" />
     <Compile Include="IAppVersionProvider.cs" />
     <Compile Include="NuGetConstants.cs" />
