@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reactive.Concurrency;
-using System.Text;
-using NuSelfUpdate;
 using System.Reactive.Linq;
 
 namespace NuSelfUpdate.Sample
