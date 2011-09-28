@@ -16,6 +16,7 @@ namespace NuSelfUpdate
         readonly string _appDirectory;
         readonly ICommandLineWrapper _commandLineWrapper;
         readonly IProcessWrapper _processWrapper;
+        readonly string _oldVersionDir;
 
         public AppUpdater(AppUpdaterConfig config)
         {
@@ -27,13 +28,14 @@ namespace NuSelfUpdate
             _appDirectory = config.AppDirectory;
             _commandLineWrapper = config.CommandLineWrapper;
             _processWrapper = config.ProcessWrapper;
+            _oldVersionDir = Path.Combine(_appDirectory, ".old");
         }
 
         public bool OldVersionExists
         {
             get
             {
-                return _fileSystem.DirectoryExists(Path.Combine(_appDirectory, ".old"));
+                return _fileSystem.DirectoryExists(_oldVersionDir);
             }
         }
 
@@ -74,7 +76,7 @@ namespace NuSelfUpdate
         {
             AssertCanUpdate(preparedUpdate.Version);
 
-            var oldVersionDir = Path.Combine(_appDirectory, ".old");
+            var oldVersionDir = _oldVersionDir;
             var basePrepDir = Path.Combine(_appDirectory, ".updates");
             var prepDir = Path.Combine(basePrepDir, preparedUpdate.Version.ToString());
 
@@ -116,7 +118,7 @@ namespace NuSelfUpdate
 
         public void RemoveOldVersionFiles()
         {
-            _fileSystem.DeleteDirectory(Path.Combine(_appDirectory, ".old"), true);
+            _fileSystem.DeleteDirectory(_oldVersionDir, true);
         }
 
         string Get(string path, string relativeTo)
