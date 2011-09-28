@@ -1,6 +1,7 @@
 ﻿using System;
 using NSubstitute;
 using NuSelfUpdate.Tests.Helpers;
+using Shouldly;
 
 namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
 {
@@ -10,6 +11,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
         AppUpdater _appUpdater;
         InstalledUpdate _installedUpdate;
         TestUpdaterConfig _config;
+        InstalledUpdate _returnedInstalledUpdate;
 
         void GivenTheAppWasRunWithAPathThatContainsSpacesAndArgumentsThatDoContainSpaces()
         {
@@ -32,12 +34,17 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
 
         void WhenLaunchInstalledUpdateIsCalled()
         {
-            _appUpdater.LaunchInstalledUpdate(_installedUpdate);
+            _returnedInstalledUpdate = _appUpdater.LaunchInstalledUpdate(_installedUpdate);
         }
 
         void ThenTheApplicationWillBeLaunchedWithNoArguments()
         {
             _config.ProcessWrapper.Received().Start(@"C:\Program Files\myapp.exe", "-v1 -updatemode" + " \"auto update\"");
+        }
+
+        void AndTheInstalledUpdateReturnedWillBeTheSameAsTheOnePassedIn()
+        {
+            _returnedInstalledUpdate.ShouldBe(_installedUpdate);
         }
     }
 }
