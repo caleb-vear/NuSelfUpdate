@@ -38,7 +38,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
         void ThenAnArgumentExceptionWillBeThrown()
         {
             _exception.ShouldBeTypeOf<ArgumentException>();
-            _exception.As<ArgumentException>().ParamName.ShouldBe("package");
+            ((ArgumentException)_exception).ParamName.ShouldBe("package");
         }
     }
 }

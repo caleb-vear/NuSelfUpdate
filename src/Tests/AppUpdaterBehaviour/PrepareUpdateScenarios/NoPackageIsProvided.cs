@@ -22,7 +22,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
         void ThenAnArgumentNullExceptionWillBeThrown()
         {
             _exception.ShouldBeTypeOf<ArgumentNullException>();
-            _exception.As<ArgumentNullException>().ParamName.ShouldBe("package");
+            ((ArgumentNullException)_exception).ParamName.ShouldBe("package");
         }
     }
 }

@@ -38,7 +38,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
         void ThenABackwardUpdateExceptionWillBeThrown()
         {
             _exception.ShouldBeTypeOf<BackwardUpdateException>();
-            var backwardUpdate = _exception.As<BackwardUpdateException>();
+            var backwardUpdate = (BackwardUpdateException) _exception;
             backwardUpdate.InstalledVersion.ShouldBe(_installedVersion);
             backwardUpdate.TargetVersion.ShouldBe(_installedVersion);
         }
