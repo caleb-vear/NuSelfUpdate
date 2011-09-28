@@ -34,10 +34,10 @@ NuSelfUpdate lets you write code like this:
         
 		// This will run the UpdateDatabase method if this is the first 
 		// time we have run the application after an update is installed.
-        if (appUpdater.JustInstalledUpdates)
+        if (appUpdater.OldVersionExists)
 		{
 			UpgradeDatabase();
-			appUpdater.RemoveOldFilesAndClearJustInstalledUpdates();
+			appUpdater.RemoveOldVersionFiles();
 		}
         
         var updateCheck = appUpdater.CheckForUpdate();

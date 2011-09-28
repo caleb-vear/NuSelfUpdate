@@ -29,6 +29,14 @@ namespace NuSelfUpdate
             _processWrapper = config.ProcessWrapper;
         }
 
+        public bool OldVersionExists
+        {
+            get
+            {
+                return _fileSystem.DirectoryExists(Path.Combine(_appDirectory, ".old"));
+            }
+        }
+
         public IUpdateCheck CheckForUpdate()
         {
             var currentVersion = _appVersionProvider.CurrentVersion;
