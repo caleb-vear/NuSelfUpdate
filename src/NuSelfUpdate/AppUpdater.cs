@@ -98,6 +98,22 @@ namespace NuSelfUpdate
             return new InstalledUpdate(_appVersionProvider.CurrentVersion, preparedUpdate.Version);
         }
 
+        public InstalledUpdate LaunchInstalledUpdate(InstalledUpdate installedUpdate)
+        {
+            var fullCmdLine = _commandLineWrapper.Full;
+            var arguments = _commandLineWrapper.Arguments;
+
+            var filename = arguments[0];
+            var cmdArguments = fullCmdLine.Substring(fullCmdLine.IndexOf(filename) + filename.Length);
+
+            if (cmdArguments.StartsWith("\""))
+                cmdArguments = cmdArguments.Substring(1);
+
+            _processWrapper.Start(filename, cmdArguments.Trim());
+
+            return installedUpdate;
+        }
+
         string Get(string path, string relativeTo)
         {
             var pathSegments = new List<string>();
@@ -113,26 +129,10 @@ namespace NuSelfUpdate
             return Path.Combine(pathSegments.AsEnumerable().Reverse().ToArray());
         }
 
-        private void AssertCanUpdate(Version targetVersion)
+        void AssertCanUpdate(Version targetVersion)
         {
             if (targetVersion <= _appVersionProvider.CurrentVersion)
                 throw new BackwardUpdateException(_appVersionProvider.CurrentVersion, targetVersion);
-        }
-
-        public InstalledUpdate LaunchInstalledUpdate(InstalledUpdate installedUpdate)
-        {
-            var fullCmdLine = _commandLineWrapper.Full;
-            var arguments = _commandLineWrapper.Arguments;
-
-            var filename = arguments[0];
-            var cmdArguments = fullCmdLine.Substring(fullCmdLine.IndexOf(filename) + filename.Length);
-
-            if (cmdArguments.StartsWith("\""))
-                cmdArguments = cmdArguments.Substring(1);
-
-            _processWrapper.Start(filename, cmdArguments.Trim());
-
-            return installedUpdate;
         }
     }
 }
