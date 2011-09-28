@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bddify">
-      <HintPath>..\packages\Bddify.0.7\lib\NET40\Bddify.dll</HintPath>
+    <Reference Include="Bddify, Version=0.8.0.0, Culture=neutral, PublicKeyToken=d538bbfef9a5dfcc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Bddify.0.8\lib\NET40\Bddify.dll</HintPath>
     </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.2.0.0\lib\NET40\NSubstitute.dll</HintPath>
@@ -124,7 +125,6 @@
   <ItemGroup>
     <Content Include="Bddify.ReadMe.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
