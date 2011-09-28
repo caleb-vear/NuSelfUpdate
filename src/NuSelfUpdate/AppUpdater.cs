@@ -114,6 +114,11 @@ namespace NuSelfUpdate
             return installedUpdate;
         }
 
+        public void RemoveOldVersionFiles()
+        {
+            _fileSystem.DeleteDirectory(Path.Combine(_appDirectory, ".old"), true);
+        }
+
         string Get(string path, string relativeTo)
         {
             var pathSegments = new List<string>();

@@ -125,6 +125,9 @@ namespace NuSelfUpdate.Tests.Helpers
 
         public virtual bool DirectoryExists(string path)
         {
+            while (path.EndsWith("\\"))
+                path = path.Substring(0, path.Length - 1);
+
             return Paths.Select(file => file.Key)
                         .Any(file => Path.GetDirectoryName(file).Equals(path, StringComparison.OrdinalIgnoreCase));
         }
