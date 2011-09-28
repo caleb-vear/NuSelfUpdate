@@ -34,5 +34,11 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour
         {
             new ExePathContainsSpaces().Bddify();
         }
+
+        [Test]
+        public void InstalledUpdateIsNull()
+        {
+            new InstalledUpdateIsNull().Bddify();
+        }
     }
 }

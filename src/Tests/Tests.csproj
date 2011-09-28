@@ -83,6 +83,7 @@
     <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\CommandLineArgumentsWithoutSpaces.cs" />
     <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\CommandLineArgumentsWithSpaces.cs" />
     <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\ExePathContainsSpaces.cs" />
+    <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\InstalledUpdateIsNull.cs" />
     <Compile Include="AppUpdaterBehaviour\LaunchInstalledUpdateScenarios\NoCommandLineArguments.cs" />
     <Compile Include="AppUpdaterBehaviour\OldVersionExists.cs" />
     <Compile Include="AppUpdaterBehaviour\OldVersionExistsScenarios\AnOldVersionExists.cs" />
@@ -109,6 +110,9 @@
     <Compile Include="Helpers\PackageRepositoryFactories.cs" />
     <Compile Include="Helpers\Packages.cs" />
     <Compile Include="Helpers\Run.cs" />
+    <Compile Include="InstalledUpdateBehaviour\CreateWithNewVersionEqualToOldVersion.cs" />
+    <Compile Include="InstalledUpdateBehaviour\CreateWithNewVersionGreaterThanTheOldVersion.cs" />
+    <Compile Include="InstalledUpdateBehaviour\CreateWithNewVersionLessThanOld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +127,7 @@
   <ItemGroup>
     <Content Include="Bddify.ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

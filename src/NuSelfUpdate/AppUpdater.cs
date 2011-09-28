@@ -102,6 +102,9 @@ namespace NuSelfUpdate
 
         public InstalledUpdate LaunchInstalledUpdate(InstalledUpdate installedUpdate)
         {
+            if (installedUpdate == null)
+                throw new ArgumentNullException("installedUpdate");
+
             var fullCmdLine = _commandLineWrapper.Full;
             var arguments = _commandLineWrapper.Arguments;
 

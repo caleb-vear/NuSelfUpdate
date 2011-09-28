@@ -9,6 +9,9 @@ namespace NuSelfUpdate
 
         public InstalledUpdate(Version old, Version newVersion)
         {
+            if (old >= newVersion)
+                throw new BackwardUpdateException(old, newVersion);
+
             OldVersion = old;
             NewVersion = newVersion;
         }
