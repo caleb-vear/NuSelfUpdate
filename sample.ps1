@@ -2,7 +2,6 @@ include .\psake_ext.ps1
 
 properties {
     $base_dir = resolve-path .
-    $lib_dir = "$base_dir\Dependencies"
     $build_dir = "$base_dir\build"
     $buildartifacts_dir = "$build_dir\bin"
     $sln_file = "$base_dir\src\NuSelfUpdate.sln"
@@ -44,27 +43,33 @@ task ResetVersion {
 }
 
 task RunSampleInit -depends FullClean, ResetVersion {    
-	new-item $build_dir -itemType directory
-	new-item $buildartifacts_dir -itemType directory
-	new-item $sample_dir -itemType directory
-	new-item $samplepackage_dir -itemType directory
-	new-item $prepPackage_dir -itemType directory
-	new-item $prepPackageApp_dir -itemType directory
+	new-item $build_dir -itemType directory | out-null
+	new-item $buildartifacts_dir -itemType directory | out-null
+	new-item $sample_dir -itemType directory | out-null
+	new-item $samplepackage_dir -itemType directory | out-null
+	new-item $prepPackage_dir -itemType directory | out-null
+	new-item $prepPackageApp_dir -itemType directory | out-null
 }
 
 task PublishInit -depends PublishClean, UpdateVersion {    
-	new-item $buildartifacts_dir -itemType directory
-	new-item $prepPackage_dir -itemType directory
-	new-item $prepPackageApp_dir -itemType directory
+	new-item $buildartifacts_dir -itemType directory | out-null
+	new-item $prepPackage_dir -itemType directory | out-null
+	new-item $prepPackageApp_dir -itemType directory | out-null
 	
 	if(!(test-path $samplepackage_dir -pathtype container)){
-		new-item $samplepackage_dir -type directory
+		new-item $samplepackage_dir -type directory | out-null
 	}
 }
 
 task Compile {
 	$v4_net_version = (ls "$env:windir\Microsoft.NET\Framework\v4.0*").Name
-    exec "$env:windir\Microsoft.NET\Framework\$v4_net_version\MSBuild.exe" """$sln_file"" /p:Configuration=Release;OutDir=$buildartifacts_dir\"
+	$msbuildExe = "$env:windir\Microsoft.NET\Framework\$v4_net_version\MSBuild.exe"
+	$msbuildArgs = """$sln_file"" /p:Configuration=Release;OutDir=$buildartifacts_dir\"
+    $p = start-process $msbuildExe $msbuildArgs -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$build_dir\MsbuildOutput.txt"
+	
+	if ($p.ExitCode -ne 0) {
+		throw "MsBuild failed see $build_dir\MsbuildOutput.txt"
+	}
 }
 
 task PreparePackageFiles -depends Compile {
@@ -88,7 +93,11 @@ task BuildPackage -depends PreparePackageFiles {
 	$nugetExe = "$packages_dir\$nugetVersion\tools\nuget.exe"
 	$nugetArguments = "pack ""$prepPackage_dir\NuSelfUpdate.Sample.nuspec"" -OutputDirectory ""$prepPackage_dir"" -Version $version"
 	
-	start-process $nugetExe $nugetArguments -Wait -NoNewWindow
+	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$build_dir\nugetoutput.txt"
+	
+	if ($p.ExitCode -ne 0) {
+		throw "NuGet pack failed see $build_dir\nugetoutput.txt"
+	}
 }
 
 task PublishNewVersion -depends PublishInit, BuildPackage, ResetVersion {
