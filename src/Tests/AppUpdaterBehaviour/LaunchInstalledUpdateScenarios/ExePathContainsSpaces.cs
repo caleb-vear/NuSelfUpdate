@@ -10,21 +10,27 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
         Version _installedVersion;
         AppUpdater _appUpdater;
         InstalledUpdate _installedUpdate;
-        TestUpdaterConfig _config;
+        AppUpdaterBuilder _builder;
         InstalledUpdate _returnedInstalledUpdate;
+        ICommandLineWrapper _commandLineWrapper;
+        IProcessWrapper _processWrapper;
 
         void GivenTheAppWasRunWithAPathThatContainsSpacesAndArgumentsThatDoContainSpaces()
         {
             _installedVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_installedVersion);
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion);
 
-            _config.CommandLineWrapper.Full.Returns("\"C:\\Program Files\\myapp.exe\" -v1 -updatemode \"auto update\"");
-            _config.CommandLineWrapper.Arguments.Returns(new[] { "C:\\Program Files\\myapp.exe", "-v1", "-updatemode", "auto update" });
+            _commandLineWrapper = _builder.GetSubsituteCommandLineWrapper();
+            _processWrapper = _builder.GetSubsituteProcessWrapper();
+
+            _commandLineWrapper.Full.Returns("\"C:\\Program Files\\myapp.exe\" -v1 -updatemode \"auto update\"");
+            _commandLineWrapper.Arguments.Returns(new[] { "C:\\Program Files\\myapp.exe", "-v1", "-updatemode", "auto update" });
         }
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = _builder.Build();
         }
 
         void AndGivenAnInstalledUpdate()
@@ -39,7 +45,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
 
         void ThenTheApplicationWillBeLaunchedWithNoArguments()
         {
-            _config.ProcessWrapper.Received().Start(@"C:\Program Files\myapp.exe", "-v1 -updatemode" + " \"auto update\"");
+            _processWrapper.Received().Start(@"C:\Program Files\myapp.exe", "-v1 -updatemode" + " \"auto update\"");
         }
 
         void AndTheInstalledUpdateReturnedWillBeTheSameAsTheOnePassedIn()

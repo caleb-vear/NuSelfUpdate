@@ -2,7 +2,7 @@
 
 namespace NuSelfUpdate
 {
-    public class ProcessWrapperWrapper : IProcessWrapper
+    public class ProcessWrapper : IProcessWrapper
     {
         public void Start(string fileName, string arguments)
         {

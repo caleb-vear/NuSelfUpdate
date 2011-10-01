@@ -11,8 +11,9 @@ namespace NuSelfUpdate.Tests.Helpers
     {
         private ILogger _logger;
 
-        public MockFileSystem()
+        public MockFileSystem(string appDirectory)
         {
+            AppDirectory = appDirectory;
             Paths = new Dictionary<string, Func<Stream>>(StringComparer.OrdinalIgnoreCase);
             Deleted = new HashSet<string>();
         }
@@ -36,6 +37,9 @@ namespace NuSelfUpdate.Tests.Helpers
                 return @"C:\MockFileSystem\";
             }
         }
+
+        public string AppDirectory { get; private set; }
+
 
         public virtual IDictionary<string, Func<Stream>> Paths
         {

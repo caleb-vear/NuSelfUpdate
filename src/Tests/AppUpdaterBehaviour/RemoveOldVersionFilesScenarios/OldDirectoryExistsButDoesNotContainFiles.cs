@@ -8,16 +8,18 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.RemoveOldVersionFilesScenarios
     public class OldDirectoryExistsButDoesNotContainFiles : BaseRemoveOldVerisionFilesScenario
     {
         Version _installedVersion;
-        TestUpdaterConfig _config;
         MockFileSystem _fileSystem;
         string[] _appFiles;
         AppUpdater _appUpdater;
+        AppUpdaterBuilder _builder;
 
         void GivenAnApplicationDirectoryContainingAppFiles()
         {
             _installedVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_installedVersion);
-            _fileSystem = (MockFileSystem)_config.FileSystem;
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion);
+
+            _fileSystem = _builder.GetMockFileSystem();
 
             _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db", "content\\logo.png" };
 
@@ -32,7 +34,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.RemoveOldVersionFilesScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = _builder.Build();
         }
 
         void WhenRemoveOldVersionFilesIsCalled()

@@ -13,22 +13,21 @@ namespace NuSelfUpdate
         readonly IPackageRepositoryFactory _packageRepositoryFactory;
         readonly IAppVersionProvider _appVersionProvider;
         readonly IExtendedFileSystem _fileSystem;
-        readonly string _appDirectory;
         readonly ICommandLineWrapper _commandLineWrapper;
         readonly IProcessWrapper _processWrapper;
         readonly string _oldVersionDir;
 
-        public AppUpdater(AppUpdaterConfig config)
+        public AppUpdater(NuGetConfig nugetConfig, IAppVersionProvider appVersionProvider, IExtendedFileSystem fileSystem, ICommandLineWrapper commandLineWrapper, IProcessWrapper processWrapper)
         {
-            _packageSource = config.PackageSource;
-            _appPackageId = config.AppPackageId;
-            _packageRepositoryFactory = config.PackageRepositoryFactory;
-            _appVersionProvider = config.AppVersionProvider;
-            _fileSystem = config.FileSystem;
-            _appDirectory = config.AppDirectory;
-            _commandLineWrapper = config.CommandLineWrapper;
-            _processWrapper = config.ProcessWrapper;
-            _oldVersionDir = Path.Combine(_appDirectory, ".old");
+            _appVersionProvider = appVersionProvider;
+            _fileSystem = fileSystem;
+            _commandLineWrapper = commandLineWrapper;
+            _processWrapper = processWrapper;
+            _packageSource = nugetConfig.PackageSource;
+            _appPackageId = nugetConfig.AppPackageId;
+            _packageRepositoryFactory = nugetConfig.RepositoryFactory;
+
+            _oldVersionDir = Path.Combine(_fileSystem.AppDirectory, ".old");
         }
 
         public bool OldVersionExists
@@ -39,13 +38,17 @@ namespace NuSelfUpdate
             }
         }
 
+        public Version CurrentVersion
+        {
+            get { return _appVersionProvider.CurrentVersion; }
+        }
+
         public IUpdateCheck CheckForUpdate()
         {
-            var currentVersion = _appVersionProvider.CurrentVersion;
             var repository = _packageRepositoryFactory.CreateRepository(_packageSource);
             var latestPackage = repository.FindPackage(_appPackageId);
 
-            if (latestPackage == null || currentVersion >= latestPackage.Version)
+            if (latestPackage == null || CurrentVersion >= latestPackage.Version)
                 return new UpdateNotFound();
 
             return new UpdateFound(latestPackage);
@@ -58,7 +61,7 @@ namespace NuSelfUpdate
 
             AssertCanUpdate(package.Version);
 
-            var prepDirectory = Path.Combine(_appDirectory, ".updates", package.Version.ToString());
+            var prepDirectory = Path.Combine(_fileSystem.AppDirectory, ".updates", package.Version.ToString());
             var preparedFiles = new List<string>();
 
             foreach (var packageFile in package.GetFiles("app"))
@@ -77,7 +80,7 @@ namespace NuSelfUpdate
             AssertCanUpdate(preparedUpdate.Version);
 
             var oldVersionDir = _oldVersionDir;
-            var basePrepDir = Path.Combine(_appDirectory, ".updates");
+            var basePrepDir = Path.Combine(_fileSystem.AppDirectory, ".updates");
             var prepDir = Path.Combine(basePrepDir, preparedUpdate.Version.ToString());
 
             if (_fileSystem.DirectoryExists(oldVersionDir))
@@ -86,7 +89,7 @@ namespace NuSelfUpdate
             foreach (var filePath in preparedUpdate.Files)
             {
                 var fileName = Get(filePath, relativeTo: prepDir);
-                var appFilePath = Path.Combine(_appDirectory, fileName);
+                var appFilePath = Path.Combine(_fileSystem.AppDirectory, fileName);
                 if (_fileSystem.FileExists(appFilePath))
                 {
                     _fileSystem.MoveFile(appFilePath, Path.Combine(oldVersionDir, fileName));
@@ -97,7 +100,7 @@ namespace NuSelfUpdate
 
             _fileSystem.DeleteDirectory(basePrepDir, true);
 
-            return new InstalledUpdate(_appVersionProvider.CurrentVersion, preparedUpdate.Version);
+            return new InstalledUpdate(CurrentVersion, preparedUpdate.Version);
         }
 
         public InstalledUpdate LaunchInstalledUpdate(InstalledUpdate installedUpdate)
@@ -141,8 +144,8 @@ namespace NuSelfUpdate
 
         void AssertCanUpdate(Version targetVersion)
         {
-            if (targetVersion <= _appVersionProvider.CurrentVersion)
-                throw new BackwardUpdateException(_appVersionProvider.CurrentVersion, targetVersion);
+            if (targetVersion <= CurrentVersion)
+                throw new BackwardUpdateException(CurrentVersion, targetVersion);
         }
     }
 }

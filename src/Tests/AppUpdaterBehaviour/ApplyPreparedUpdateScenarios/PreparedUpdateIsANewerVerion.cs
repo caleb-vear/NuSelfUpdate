@@ -11,19 +11,21 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
     public class PreparedUpdateIsANewerVerion : BaseApplyUpdateScenario
     {
         Version _preUpdateVersion;
-        TestUpdaterConfig _config;
         string[] _appFiles;
         IPreparedUpdate _preparedUpdate;
         AppUpdater _appUpdater;
         string[] _newAppFiles;
         Version _newVersion;
         InstalledUpdate _installedUpdated;
+        AppUpdaterBuilder _builder;
 
         void GivenAnInstalledVersion()
         {
             _preUpdateVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_preUpdateVersion);
-            FileSystem = (MockFileSystem)_config.FileSystem;
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_preUpdateVersion);
+
+            FileSystem = _builder.GetMockFileSystem();
 
             _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db", "content\\logo.png" };
 
@@ -52,7 +54,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = _builder.Build();
         }
 
         void WhenThePreparedUpdateIsApplied()

@@ -8,18 +8,20 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.OldVersionExistsScenarios
     public class AnOldVersionExists
     {
         Version _installedVersion;
-        TestUpdaterConfig _config;
         MockFileSystem _fileSystem;
         string[] _appFiles;
         AppUpdater _appUpdater;
+        AppUpdaterBuilder _builder;
         protected const string AppDirectory = @"c:\app\";
         protected const string OldDir = @"c:\app\.old\";
 
         void GivenAnApplicationDirectoryContainingAppFiles()
         {
             _installedVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_installedVersion);
-            _fileSystem = (MockFileSystem)_config.FileSystem;
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion);
+
+            _fileSystem = _builder.GetMockFileSystem();
 
             _appFiles = new[] { "app.exe", "app.exe.config", "nuget.dll", "data.db", "content\\logo.png" };
 
@@ -37,7 +39,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.OldVersionExistsScenarios
 
         void WhenAnAppUpdaterIsCreated()
         {
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = _builder.Build();
         }
 
         void ThenTheOldVersionExistsPropertyWillBeTrue()

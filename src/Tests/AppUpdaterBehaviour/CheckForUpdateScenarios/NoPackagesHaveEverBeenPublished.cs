@@ -13,29 +13,30 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.CheckForUpdateScenarios
         IEnumerable<IPackage> _packages;
         AppUpdater _updater;
         IUpdateCheck _updateCheck;
-        TestUpdaterConfig _config;
+        AppUpdaterBuilder _builder;
 
         void GivenAnInstalledVersion()
         {
             _installedVersion = new Version(1, 0, 0, 0);
-            _config = new TestUpdaterConfig(_installedVersion);
-
         }
 
         void AndGivenNoNewerPackagesHaveBeenPublishedWithTheAppPackageId()
         {
-            _packages = Packages.FromVersions(_config.AppPackageId, _installedVersion);
+            _packages = Packages.FromVersions(TestConstants.AppPackageId, _installedVersion);
         }
 
         void AndGivenNoPackagesHaveBeenPublished()
         {
             _packages = Enumerable.Empty<IPackage>();
-            _config.PublishedPackages = _packages;
+
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion)
+                .SetPublishedPackages(_packages);
         }
 
         void AndGivenAnAppUpdater()
         {
-            _updater = new AppUpdater(_config);
+            _updater = _builder.Build();
         }
 
         void WhenCheckForUpdateIsCalled()

@@ -1,13 +1,20 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using NuGet;
 
 namespace NuSelfUpdate
 {
     public class ExtendedPhysicalFileSystem : PhysicalFileSystem, IExtendedFileSystem
     {
-        public ExtendedPhysicalFileSystem(string root)
-            : base(root)
+        public ExtendedPhysicalFileSystem(string applicationDirectory)
+            : base(applicationDirectory)
         {
+        }
+
+        public string AppDirectory
+        {
+            get { return Root; }
         }
 
         public void MoveFile(string sourcePath, string destinationPath)

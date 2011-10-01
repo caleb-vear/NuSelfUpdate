@@ -10,18 +10,20 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
     public class TheLastOldVersionHasNotBeenCleanedUp : BaseApplyUpdateScenario
     {
         Version _preUpdateVersion;
-        TestUpdaterConfig _config;
         string _appFile;
         IPreparedUpdate _preparedUpdate;
         Version _newVersion;
         AppUpdater _appUpdater;
         string _cruftFile;
+        AppUpdaterBuilder _builder;
 
         void GivenAnInstalledVersion()
         {
             _preUpdateVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_preUpdateVersion);
-            FileSystem = (MockFileSystem)_config.FileSystem;
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_preUpdateVersion);
+
+            FileSystem = _builder.GetMockFileSystem();
 
             _appFile = "app.exe";
 
@@ -50,7 +52,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = _builder.Build();
         }
 
         void WhenThePreparedUpdateIsApplied()

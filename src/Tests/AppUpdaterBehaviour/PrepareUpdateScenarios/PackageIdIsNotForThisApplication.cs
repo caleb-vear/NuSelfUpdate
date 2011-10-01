@@ -12,7 +12,6 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
         AppUpdater _appUpdater;
         IPackage _incorrectPackage;
         Exception _exception;
-        TestUpdaterConfig _config;
 
         void GivenAnInstalledVersion()
         {
@@ -21,8 +20,9 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _config = new TestUpdaterConfig(_installedVersion);
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion)
+                .Build();
         }
 
         void AndGivenAPackageWithANewerVersionNumberButAnIdOtherThanTheAppsId()

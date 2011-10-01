@@ -12,7 +12,6 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
         AppUpdater _appUpdater;
         IPackage _oldVersionPackage;
         Exception _exception;
-        TestUpdaterConfig _config;
 
         void GivenAnInstalledVersion()
         {
@@ -21,13 +20,14 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _config = new TestUpdaterConfig(_installedVersion);
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion)
+                .Build();
         }
 
         void AndGivenAPackageForAnOlderVersion()
         {
-            _oldVersionPackage = Packages.FromVersions(_config.AppPackageId, new Version(0,1)).Single();
+            _oldVersionPackage = Packages.FromVersions(TestConstants.AppPackageId, new Version(0,1)).Single();
         }
 
         void WhenTheUpdateIsPrepared()

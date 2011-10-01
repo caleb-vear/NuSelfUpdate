@@ -25,7 +25,9 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.ApplyPreparedUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(new TestUpdaterConfig(_installedVersion));
+            _appUpdater = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion)
+                .Build();
         }
 
         void WhenApplyingPreparedUpdate()

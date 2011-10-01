@@ -58,7 +58,7 @@ NuSelfUpdate lets you write code like this:
     AppUpdater CreateSelfUpdater()
     {
         // Some configuration code here:
-        return new AppUpdater(new AppUpdaterConfig("NuSelfUpdate.Sample"));
+        return new AppUpdaterBuilder("NuSelfUpdate.Sample").Build();
     }
 
     void UpgradeDatabase()

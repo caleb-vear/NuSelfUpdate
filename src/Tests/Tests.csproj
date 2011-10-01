@@ -103,7 +103,8 @@
     <Compile Include="AppUpdaterBehaviour\RemoveOldVersionFilesScenarios\OldFilesDoNotExist.cs" />
     <Compile Include="AppUpdaterBehaviour\RemoveOldVersionFilesScenarios\OldFilesExist.cs" />
     <Compile Include="BddifyTest.cs" />
-    <Compile Include="Helpers\TestUpdaterConfig.cs" />
+    <Compile Include="Helpers\TestAppUpdateBuilderExtensions.cs" />
+    <Compile Include="Helpers\TestConstants.cs" />
     <Compile Include="Helpers\MockFileSystem.cs" />
     <Compile Include="Helpers\PackageRepositoryFactories.cs" />
     <Compile Include="Helpers\Packages.cs" />

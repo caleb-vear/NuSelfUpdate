@@ -10,21 +10,27 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
         Version _installedVersion;
         AppUpdater _appUpdater;
         InstalledUpdate _installedUpdate;
-        TestUpdaterConfig _config;
         InstalledUpdate _returnedInstalledUpdate;
+        AppUpdaterBuilder _builder;
+        ICommandLineWrapper _commandLineWrapper;
+        IProcessWrapper _processWrapper;
 
         void GivenTheAppWasRunWithArgumentsThatDoNotContainSpaces()
         {
             _installedVersion = new Version(1, 0);
-            _config = new TestUpdaterConfig(_installedVersion);
+            _builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion);
 
-            _config.CommandLineWrapper.Full.Returns(@".\myapp.exe -v1 -updatemode autoupdate");
-            _config.CommandLineWrapper.Arguments.Returns(new[] { @".\myapp.exe", "-v1", "-updatemode", "autoupdate" });
+            _commandLineWrapper = _builder.GetSubsituteCommandLineWrapper();
+            _processWrapper = _builder.GetSubsituteProcessWrapper();
+
+            _commandLineWrapper.Full.Returns(@".\myapp.exe -v1 -updatemode autoupdate");
+            _commandLineWrapper.Arguments.Returns(new[] { @".\myapp.exe", "-v1", "-updatemode", "autoupdate" });
         }
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(_config);
+            _appUpdater = _builder.Build();
         }
 
         void AndGivenAnInstalledUpdate()
@@ -39,7 +45,7 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
 
         void ThenTheApplicationWillBeLaunchedWithNoArguments()
         {
-            _config.ProcessWrapper.Received().Start(@".\myapp.exe", "-v1 -updatemode autoupdate");
+            _processWrapper.Received().Start(@".\myapp.exe", "-v1 -updatemode autoupdate");
         }
 
         void AndTheInstalledUpdateReturnedWillBeTheSameAsTheOnePassedIn()

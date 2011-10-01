@@ -17,7 +17,9 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.LaunchInstalledUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _appUpdater = new AppUpdater(new TestUpdaterConfig(new Version(1, 0)));
+            _appUpdater = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(new Version(1, 0))
+                .Build();
         }
 
         void WhenLaunchInstalledUpdateIsCalled()

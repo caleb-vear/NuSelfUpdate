@@ -2,7 +2,7 @@
 
 namespace NuSelfUpdate
 {
-    public class CommandLineWrapperWrapper : ICommandLineWrapper
+    public class CommandLineWrapper : ICommandLineWrapper
     {
         public string Full
         {

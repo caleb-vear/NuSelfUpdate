@@ -16,7 +16,6 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
         IPackage _package;
         IEnumerable<IPackageFile> _appFiles;
         IEnumerable<IPackageFile> _otherFiles;
-        TestUpdaterConfig _config;
         MockFileSystem _fileSystem;
         IPreparedUpdate _preparedUpdate;
         List<string> _expectedFiles;
@@ -28,14 +27,17 @@ namespace NuSelfUpdate.Tests.AppUpdaterBehaviour.PrepareUpdateScenarios
 
         void AndGivenAnAppUpdater()
         {
-            _config = new TestUpdaterConfig(_installedVersion);
-            _fileSystem = (MockFileSystem) _config.FileSystem;
-            _appUpdater = new AppUpdater(_config);
+            var builder = new AppUpdaterBuilder(TestConstants.AppPackageId)
+                .SetupWithTestValues(_installedVersion);
+
+            _fileSystem = builder.GetMockFileSystem();
+
+            _appUpdater = builder.Build();
         }
 
         void AndGivenAPackageForANewerVersionOfTheApp()
         {
-            _package = Packages.FromVersions(_config.AppPackageId, new Version(1, 1)).Single();
+            _package = Packages.FromVersions(TestConstants.AppPackageId, new Version(1, 1)).Single();
             _appFiles = GetAppFileSubstitutes("app", "app.exe", "app.exe.config", "nuget.dll", @"content\logo.png").ToArray();
             _otherFiles = GetAppFileSubstitutes("", "README.md").ToArray();
 
