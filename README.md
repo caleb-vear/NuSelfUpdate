@@ -72,6 +72,20 @@ NuSelfUpdate lets you write code like this:
     }
 ```
 
+Building The Project
+--------------------
+While the simplest way to get your hands on NuSelfUpdate is via nuget it is possible you might like 
+to make your own modifications and then build them.  This can useful if for example you complete
+a new feature and it hasn't been pulled into the main repository yet.
+
+Running the build is simple, all you have to do is fire up powershell navigate to the source directory root
+and run the following:
+
+    PS> .\psake.sp1
+	
+A directory named build will be created which will contain a brand new nupkg file.  It also contains the raw
+binary files in the /bin/ folder and all build log output in a folder named /output/.
+
 Running The Sample
 ------------------
 The NuSelfUpdate source includes a working sample of the library in action.
