@@ -1,9 +1,10 @@
-include .\psake_ext.ps1
+include .\sample_ext.ps1
 
 properties {
     $base_dir = resolve-path .
     $build_dir = "$base_dir\build"
     $buildartifacts_dir = "$build_dir\bin"
+	$buildoutput_dir = "$build_dir\output"
     $sln_file = "$base_dir\src\NuSelfUpdate.sln"
     $version = Get-Date-Version
     $packages_dir = "$base_dir\src\packages"
@@ -18,6 +19,7 @@ task default -depends PublishNewVersion
 task PublishClean {
 	remove-item -force -recurse $buildartifacts_dir -ErrorAction SilentlyContinue
 	remove-item -force -recurse $prepPackage_dir -ErrorAction SilentlyContinue
+	remove-item -force -recurse $buildoutput_dir -ErrorAction SilentlyContinue
 }
 
 task FullClean {
@@ -55,6 +57,7 @@ task PublishInit -depends PublishClean, UpdateVersion {
 	new-item $buildartifacts_dir -itemType directory | out-null
 	new-item $prepPackage_dir -itemType directory | out-null
 	new-item $prepPackageApp_dir -itemType directory | out-null
+	new-item $buildoutput_dir -itemType directory | out-null
 	
 	if(!(test-path $samplepackage_dir -pathtype container)){
 		new-item $samplepackage_dir -type directory | out-null
@@ -65,10 +68,10 @@ task Compile {
 	$v4_net_version = (ls "$env:windir\Microsoft.NET\Framework\v4.0*").Name
 	$msbuildExe = "$env:windir\Microsoft.NET\Framework\$v4_net_version\MSBuild.exe"
 	$msbuildArgs = """$sln_file"" /p:Configuration=Release;OutDir=$buildartifacts_dir\"
-    $p = start-process $msbuildExe $msbuildArgs -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$build_dir\MsbuildOutput.txt"
+    $p = start-process $msbuildExe $msbuildArgs -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$buildoutput_dir\MsbuildOutput.txt"
 	
 	if ($p.ExitCode -ne 0) {
-		throw "MsBuild failed see $build_dir\MsbuildOutput.txt"
+		throw "MsBuild failed see $buildoutput_dir\MsbuildOutput.txt"
 	}
 }
 
@@ -93,10 +96,10 @@ task BuildPackage -depends PreparePackageFiles {
 	$nugetExe = "$packages_dir\$nugetVersion\tools\nuget.exe"
 	$nugetArguments = "pack ""$prepPackage_dir\NuSelfUpdate.Sample.nuspec"" -OutputDirectory ""$prepPackage_dir"" -Version $version"
 	
-	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$build_dir\nugetoutput.txt"
+	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$buildoutput_dir\NuGetOutput.txt"
 	
 	if ($p.ExitCode -ne 0) {
-		throw "NuGet pack failed see $build_dir\nugetoutput.txt"
+		throw "NuGet pack failed see $buildoutput_dir\nugetoutput.txt"
 	}
 }
 
