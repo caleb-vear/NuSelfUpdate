@@ -74,11 +74,11 @@ NuSelfUpdate lets you write code like this:
 
 Building The Project
 --------------------
-While the simplest way to get your hands on NuSelfUpdate is via nuget it is possible you might like 
+While the simplest way to get your hands on NuSelfUpdate is via nuget it is possible you may like 
 to make your own modifications and then build them.  This can useful if for example you complete
 a new feature and it hasn't been pulled into the main repository yet.
 
-Running the build is simple, all you have to do is fire up powershell navigate to the source directory root
+Running the build is simple, all you have to do is fire up powershell navigate to the source repository root
 and run the following:
 
     PS> .\psake.sp1
