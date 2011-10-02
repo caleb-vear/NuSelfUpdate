@@ -6,7 +6,7 @@ properties {
     $packages_dir = "$base_dir\src\packages"
 }
 
-task default -depends Package
+task default -depends BuildPackage
 
 task FullClean {
     remove-item -force -recurse $build_dir -ErrorAction SilentlyContinue
@@ -43,10 +43,17 @@ task Test -depends Compile {
 }
 
 task BuildPackage -depends Test {
+	$nugetVersion = (ls "$packages_dir\NuGet.CommandLine*").Name
+	$nugetExe = "$packages_dir\$nugetVersion\tools\nuget.exe"
+	$excludes = "-Exclude **\*NuSelfUpdate.Sample.exe -Exclude **\*NuSelfUpdate.Tests.dll"
+	$nugetArguments = "pack ""$base_dir\src\NuSelfUpdate\NuSelfUpdate.csproj"" -Prop Configuration=Package -OutputDirectory ""$build_dir"" $excludes"
+	
+	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$build_dir\nugetoutput.txt"
+	
+	if ($p.ExitCode -ne 0) {
+		throw "NuGet pack failed see $build_dir\nugetoutput.txt"
+	}
 }
 
-task Package -depends BuildPackage {
-}
-
-task PublishPackage -depends Package {
+task PublishPackage -depends BuildPackage {
 }
