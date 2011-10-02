@@ -50,12 +50,22 @@ task BuildPackage -depends Test {
 	$excludes = "-Exclude **\*NuSelfUpdate.Sample.exe -Exclude **\*NuSelfUpdate.Tests.dll"
 	$nugetArguments = "pack ""$base_dir\src\NuSelfUpdate\NuSelfUpdate.csproj"" -Prop Configuration=Package -OutputDirectory ""$build_dir"" $excludes"
 	
-	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$buildoutput_dir\NuGetOutput.txt"
+	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$buildoutput_dir\NuGetPackOutput.txt"
 	
 	if ($p.ExitCode -ne 0) {
-		throw "NuGet pack failed see $buildoutput_dir\nugetoutput.txt"
+		throw "NuGet pack failed see $buildoutput_dir\NuGetPackOutput.txt"
 	}
 }
 
 task PublishPackage -depends BuildPackage {
+	$nugetVersion = (ls "$packages_dir\NuGet.CommandLine*").Name
+	$nugetExe = "$packages_dir\$nugetVersion\tools\nuget.exe"
+	$package = (ls "$build_dir\NuSelfUpdate*nupkg").Name
+	$nugetArguments = "push $build_dir\$package"
+	
+	$p = start-process $nugetExe $nugetArguments -PassThru -Wait -NoNewWindow -RedirectStandardOutput "$buildoutput_dir\NuGetPushOutput.txt"
+	
+	if ($p.ExitCode -ne 0) {
+		throw "NuGet push failed see $buildoutput_dir\NuGetPushOutput.txt"
+	}
 }
