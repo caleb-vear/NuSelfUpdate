@@ -8,8 +8,8 @@ namespace NuSelfUpdate
         {
             if (string.IsNullOrEmpty(arguments))
                 Process.Start(fileName);
-
-            Process.Start(fileName, arguments);
+            else
+                Process.Start(fileName, arguments);
         }
     }
 }
